@@ -207,9 +207,14 @@
 
         }
 
-        $scope.refreshData = function(epn,callback){
-            epn = (epn || 178)
-            $http.get('http://onslyde.com/go/analytics/' + epn).
+        $scope.refreshData = function(epn,callback,params){
+            epn = (epn || 167);
+            if(!params){
+                params = {};
+            }
+            params.callback = 'JSON_CALLBACK';
+
+            $http.jsonp('http://onslyde.com/go/analytics/' + epn,{params:params}).
                     success(function (data, status, headers, config) {
                         callback(data);
                     }).
