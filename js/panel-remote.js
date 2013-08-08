@@ -1,5 +1,4 @@
-var option1 = document.querySelector('#option1');
-var option2 = document.querySelector('#option2');
+var speak = document.querySelector('#speak');
 var wtf = document.querySelector('#wtf');
 var nice = document.querySelector('#nice');
 var voteLabel = document.querySelector('#vote-label');
@@ -7,17 +6,13 @@ var voted;
 //todo make this unique user for session management/voter registration
 //var ws = slidfast.ws.join('client:anonymous2');
 
-disablePoll();
+//disablePoll();
 
-option1.onclick = function(event) {
+speak.onclick = function(event) {
   _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
-  console.log('option1.value',option1.value);
-  return sendVote(event,option1.value);
-};
-
-option2.onclick = function(event) {
-  _gaq.push(['_trackEvent', 'onslyde-option2', 'vote']);
-  return sendVote(event,option2.value);
+  console.log('option1.value',speak.value);
+//  return sendVote(event,speak.value);
+  ws.send('speak:' + document.getElementById('usercontent').innerHTML);
 };
 
 function sendVote(event,option){
@@ -25,7 +20,6 @@ function sendVote(event,option){
   if(option){
     ws.send('vote:' + option);
   }
-  disablePoll();
   return false;
 }
 
@@ -48,37 +42,32 @@ nice.onclick = function(event) {
 };
 
 function disablePoll(){
-  option1.disabled = true;
-  option2.disabled = true;
-  option1.style.opacity = .4;
-  option2.style.opacity = .4;
+  speak.disabled = true;
+  speak.style.opacity = .4;
   //voteLabel.style.opacity = .4;
   voteLabel.innerHTML = 'Waiting...';
 }
 
 window.addEventListener('updateOptions', function(e) {
   //quick check to make sure we don't re-enable on polling clients and disabling on null options
-  if(e.option1 !== undefined && e.option1 !== 'null' && e.option2 !== 'null'){
-    if((option1.value != e.option1 && option2.value != e.option2)){
-      option1.disabled = false;
-      option2.disabled = false;
+//  if(e.speak !== undefined && e.speak !== 'null'){
+//    if((speak.value != e.speak)){
+      speak.disabled = false;
       wtf.disabled = false;
       nice.disabled = false;
-      option1.value = e.option1;
-      option2.value = e.option2;
+      speak.value = 'I want to speak!';
       wtf.value = 'Thumbs Down!';
       nice.value = 'Nice!';
       //voteLabel.style.opacity = 1;
-      option1.style.opacity = 1;
-      option2.style.opacity = 1;
+      speak.style.opacity = 1;
       wtf.style.opacity = 1;
       nice.style.opacity = 1;
       voteLabel.innerHTML = 'Vote!';
       voted = false;
-    }
-  }else{
-    disablePoll();
-  }
+//    }
+//  }else{
+//    disablePoll();
+//  }
 
 
 }, false);

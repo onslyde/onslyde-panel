@@ -35,11 +35,11 @@
 
       optimizeNetwork = false,
 
-      geo = {on:true, track:false},
+      geo = {on: true, track: false},
 
       orientationNav = false,
 
-      workers = {script:null, threads:null, mycallback:null, obj:null},
+      workers = {script: null, threads: null, mycallback: null, obj: null},
 
       cacheImages = false,
 
@@ -49,13 +49,13 @@
 
       hashNS = "",
 
-      onslyde = {deck:false, sessionID:0};
+      onslyde = {deck: false, sessionID: 0, mode: 'default'};
 
 
     slidfast.core = slidfast.prototype = {
-      constructor:slidfast,
+      constructor: slidfast,
 
-      start:function () {
+      start: function () {
 
         try {
           if (options) {
@@ -110,23 +110,23 @@
           slidfast.core.cacheExternalImage();
         }
 
-        if(onslyde && onslyde.sessionID){
+        if (onslyde && onslyde.sessionID) {
           window.onslydeSessionID = onslyde.sessionID;
         }
 
-        if(onslyde && onslyde.deck){
+        if (onslyde && onslyde.deck) {
           slidfast.slides.init(onslyde.sessionID);
         }
 
 
       },
 
-      hideURLBar:function () {
+      hideURLBar: function () {
         //hide the url bar on mobile devices
         setTimeout(scrollTo, 0, 0, 1);
       },
 
-      init:function () {
+      init: function () {
 
         window.addEventListener('load', function (e) {
           isReady = true;
@@ -137,9 +137,9 @@
           slidfast.core.locationChange();
         }, false);
 
-        if(options.onslyde.deck){
+        if (options.onslyde.deck) {
           //slide specific todo fix later
-          document.addEventListener('keydown', function(e) {
+          document.addEventListener('keydown', function (e) {
             slidfast.slides.handleKeys(e);
           }, false);
         }
@@ -148,7 +148,7 @@
 
       },
 
-      locationChange:function (id) {
+      locationChange: function (id) {
         var targetId = location.hash;
         if (id) {
           location.hash = hashNS + id;
@@ -162,7 +162,7 @@
         }
       },
 
-      ajax:function (url, callback, async) {
+      ajax: function (url, callback, async) {
         var req = init();
         req.onreadystatechange = processRequest;
 
@@ -216,7 +216,7 @@
         };
       },
 
-      insertPages:function (text, originalLink) {
+      insertPages: function (text, originalLink) {
 
         var frame = getFrame();
         frame.write(text);
@@ -263,7 +263,7 @@
         }
       },
 
-      cacheExternalImage:function () {
+      cacheExternalImage: function () {
         var images = document.getElementsByTagName('img');
 
         for (var i = 0; i < images.length; i += 1) {
@@ -306,7 +306,7 @@
         }
       },
 
-      fetchAndCache:function (async) {
+      fetchAndCache: function (async) {
         var links = slidfast.core.getUnconvertedLinks(document, 'fetch');
 
         var i;
@@ -323,7 +323,7 @@
 
       },
 
-      getUnconvertedLinks:function (node, classname) {
+      getUnconvertedLinks: function (node, classname) {
         //iterate through all nodes in this DOM to find all mobile pages we care about
         var links = [];
         var pages = node.getElementsByClassName('page');
@@ -361,7 +361,7 @@
 
     slidfast.ui = slidfast.prototype = {
 
-      slideTo:function (id, callback) {
+      slideTo: function (id, callback) {
         if (!focusPage) {
           focusPage = getElement(defaultPageID);
         }
@@ -403,16 +403,16 @@
 
         //3b.) decide how this focused page should exit.
         if (stageType > 0) {
-          focusPage.className = 'page transition stage-right';
+          focusPage.className = 'slide transition stage-right';
         } else {
-          focusPage.className = 'page transition stage-left';
+          focusPage.className = 'slide transition stage-left';
         }
 
         //4. refresh/set the variable
         focusPage = id;
 
         //5. Bring in the new page.
-        focusPage.className = 'page transition stage-center';
+        focusPage.className = 'slide transition stage-center';
 
         //6. make this transition bookmarkable
         slidfast.core.locationChange(focusPage.id);
@@ -431,7 +431,7 @@
       },
 
 
-      flip:function () {
+      flip: function () {
         //get a handle on the flippable region
         var front = document.getElementById('front');
         var back = document.getElementById('back');
@@ -453,7 +453,7 @@
         }
       },
 
-      Touch:function (page) {
+      Touch: function (page) {
         //todo - tie to markup for now
         var track = getElement("page-container");
         var currentPos = page.style.left;
@@ -578,7 +578,7 @@
     var disabledLinks;
     slidfast.network = slidfast.prototype = {
 
-      init:function () {
+      init: function () {
         window.addEventListener('load', function (e) {
           if (navigator.onLine) {
             //new page load
@@ -602,9 +602,9 @@
         slidfast.network.setup();
       },
 
-      setup:function (event) {
+      setup: function (event) {
         // create a custom object if navigator.connection isn't available
-        var connection = navigator.connection || {'type':'0'};
+        var connection = navigator.connection || {'type': '0'};
         if (connection.type === 2 || connection.type === 1) {
           //wifi/ethernet
           //Coffee Wifi latency: ~75ms-200ms
@@ -630,7 +630,7 @@
         }
       },
 
-      processOnline:function (event) {
+      processOnline: function (event) {
 
         slidfast.network.setup();
         checkAppCache();
@@ -658,7 +658,7 @@
         }
       },
 
-      processOffline:function (event) {
+      processOffline: function (event) {
         slidfast.network.setup();
         //disable external links until we come back - setting the bounds of app
         disabledLinks = slidfast.core.getUnconvertedLinks(document);
@@ -686,7 +686,7 @@
     var geolocationID, currentPosition, interval, callback;
     slidfast.location = slidfast.prototype = {
 
-      init:function (geo) {
+      init: function (geo) {
         if (slidfast.html5e.supports_geolocation()) {
           if (geo.track) {
             slidfast.location.track();
@@ -705,7 +705,7 @@
         }
       },
 
-      track:function () {
+      track: function () {
         //workaround for iOS5 "watchPosition" bug https://bugs.webkit.org/show_bug.cgi?id=43956
         var count = 0;
         geolocationID = window.setInterval(
@@ -715,23 +715,23 @@
               window.clearInterval(geolocationID);
               slidfast.location.track();
             } else {
-              navigator.geolocation.getCurrentPosition(slidfast.location.setPosition, slidfast.location.error, { enableHighAccuracy:true, timeout:10000 });
+              navigator.geolocation.getCurrentPosition(slidfast.location.setPosition, slidfast.location.error, { enableHighAccuracy: true, timeout: 10000 });
             }
           },
           interval); //end setInterval;
       },
 
-      setPosition:function (position) {
+      setPosition: function (position) {
         currentPosition = position;
         console.log('position ' + position.coords.latitude + ' ' + position.coords.longitude);
         callback('position ' + position.coords.latitude + ' ' + position.coords.longitude);
       },
 
-      currentPosition:function () {
+      currentPosition: function () {
         return currentPosition;
       },
 
-      error:function (error) {
+      error: function (error) {
         switch (error.code) {
           case error.TIMEOUT:
             console.log('Timeout');
@@ -752,7 +752,7 @@
 
     slidfast.orientation = slidfast.prototype = {
 
-      init:function () {
+      init: function () {
         if (slidfast.html5e.supports_orientation) {
           if (!focusPage) {
             focusPage = getElement(defaultPageID);
@@ -761,7 +761,7 @@
         }
       },
 
-      nav:function () {
+      nav: function () {
 
         window.addEventListener("deviceorientation", function (event) {
           //alpha: rotation around z-axis
@@ -845,7 +845,7 @@
 
       },
 
-      motion:function () {
+      motion: function () {
 
         if (slidfast.html5e.supports_motion) {
           window.addEventListener('devicemotion', deviceMotionHandler, false);
@@ -882,7 +882,7 @@
     var sharedobj = {};
     slidfast.worker = slidfast.prototype = {
       //
-      init:function (workers) {
+      init: function (workers) {
 
         var mycallback = workers.mycallback;
 
@@ -973,41 +973,41 @@
         pool.addWorkerTask(workerTask);
       },
 
-      obj:function () {
+      obj: function () {
         return sharedobj;
       }
 
     };
 
-    var ip = null,ws;
+    var ip = null, ws;
     var username;
     var isopen = false;
     //var _onopen,_onmessage,_onclose,_onerror;
     slidfast.ws = slidfast.prototype = {
 
-      ip : function(sessionID) {
+      ip: function (sessionID) {
         //todo come up with better approach :)
         //there are 3 environments in which this call must be made:
         //(1) running just HTML locally
         //(2) running the ws server and HTML locally
         //(3) prod where ip needs to be hard coded since we get ec2 private IP on this call
 
-        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID,function(text,url){
-          if(location.host === 'onslyde.com'){
+        var ai = new slidfast.core.ajax('/go/presenters/ip?session=' + window.onslydeSessionID, function (text, url) {
+          if (location.host === 'onslyde.com') {
             //(3) - set proper IP if in prod
             //todo - even though we set the IP and don't use data from server, this http request bootstraps an internal piece on each connect
             ip = '107.22.176.73'
-          }else{
+          } else {
             //(2) - set proper IP dynamically for locally running server
             ip = text;
           }
 
-        },false);
+        }, false);
 
-        if(ip === null && location.protocol !== "file:"){
+        if (ip === null && location.protocol !== "file:") {
           //(3) and (2) make sure we make the ajax request
           ai.doGet();
-        }else{
+        } else {
           //(1) HTML is running locally and we can't make ajax request until implement jsonp or CORS headers
           ip = '107.22.176.73';
         }
@@ -1015,44 +1015,46 @@
         return ip;
       },
 
-      getip : function(){
+      getip: function () {
 
-        var createRandom = function(){
+        var createRandom = function () {
           return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         var aip;
         var min = 255;
         var max = 999;
-        if(!localStorage['onslyde.attendeeIP']){
+        if (!localStorage['onslyde.attendeeIP']) {
           aip = createRandom() + '.' + createRandom() + '.' + createRandom() + '.' + createRandom();
           localStorage['onslyde.attendeeIP'] = aip;
-        }else{
+        } else {
           aip = localStorage['onslyde.attendeeIP'];
         }
         return aip;
       },
 
-      connect : function(websocket,initString,sessionID) {
+      sessionID: function(){return window.onslydeSessionID;},
+
+      connect: function (websocket, initString, sessionID) {
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
         console.log('connecting now', websocket);
-        if(!websocket){
-          if(!ip){
+        if (!websocket) {
+          if (!ip) {
             ip = this.ip(window.onslydeSessionID);
           }
           var location = 'ws://' + ip + ':8081/?session=' + window.onslydeSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
-        }else{
+        } else {
           ws = websocket;
         }
-        ws.onopen = function() {
+        ws.onopen = function () {
           isopen = true;
           //basic auth until we get something better
           console.log('sent initString ' + initString);
-          slidfast.ws._send('user:'+username);
+          slidfast.ws._send('user:' + username);
 
-          if(initString){
+          if (initString) {
             slidfast.ws._send(initString);
           }
         };
@@ -1063,36 +1065,36 @@
         return ws;
       },
 
-      _onmessage : function(m) {
+      _onmessage: function (m) {
         if (m.data) {
 //          console.log(m.data);
           //check to see if this message is a CDI event
           //alert('onmessage' + m.data);
-          if(m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0){
-            try{
+          if (m.data.indexOf('sessionID":"' + onslyde.sessionID) > 0) {
+            try {
               //avoid use of eval...
               var event = (m.data);
               event = (new Function("return " + event))();
               event.onslydeEvent.fire();
-            }catch(e){
+            } catch (e) {
               console.log(e);
             }
-          }else{
+          } else {
 
           }
         }
       },
 
-      _onclose : function(m) {
+      _onclose: function (m) {
         slidfast.ws._send('::disconnect::');
         ws = null;
       },
 
-      _onerror : function(e) {
+      _onerror: function (e) {
 //        console.log(e);
       },
 
-      _send:function (message) {
+      _send: function (message) {
         //console.log('sent ');
         ws.send(message);
 
@@ -1121,14 +1123,15 @@
 
       init : function(sessionID) {
         csessionID = sessionID;
-
         futureGroups = toArray(this.groups());
         for (var i = 0; i < futureGroups.length; i++) {
           futureGroups[i].style.display = 'none';
           var thisGroupSlides = this.groupSlides(futureGroups[i]);
-          for (var j = 0; j < thisGroupSlides.length; j++) {
-            //todo use classlist
-//                  thisGroupSlides[j].className = 'slide stage-right';
+          if(onslyde.mode === 'default'){
+            for (var j = 0; j < thisGroupSlides.length; j++) {
+              //todo use classlist
+              thisGroupSlides[j].className = 'slide stage-right';
+            }
           }
         }
 
@@ -1139,21 +1142,22 @@
 
         activeSlide = futureSlides.shift();
 
-        window.addEventListener('clientVote', function(e) {
-          slidfast.slides.optionVote(e.vote,activeSlide);
+        window.addEventListener('clientVote', function (e) {
+          slidfast.slides.optionVote(e.vote, activeSlide);
         }, false);
 
         window.addEventListener('updateCount', function(e) {
           slidfast.slides.updateDeck(e.wsCount,e.pollCount);
         }, false);
 
-
-//        window.addEventListener('unload', function(e) {
-//          this.connect('::disconnect::');
-//        }, false);
+        document.getElementById('sessionID').innerHTML = csessionID;
 
         this.checkOptions();
 
+        if(onslyde.mode === 'default'){
+          focusPage = activeSlide;
+          slidfast.ui.slideTo(activeSlide);
+        }
         this.connect('::connect::');
         setTimeout(function(){slidfast.slides.updateRemotes();},1000);
       },
@@ -1177,7 +1181,6 @@
         pollcount = pc;
         document.getElementById('wscount').innerHTML = wscount;
         document.getElementById('pollcount').innerHTML = pollcount;
-        document.getElementById('sessionID').innerHTML = csessionID;
       },
 
       wsCount : function() {
@@ -1229,48 +1232,59 @@
         }
       },
 
-      clearRoute : function(){
+      clearRoute: function () {
         activeSlide.removeAttribute("data-route");
       },
 
-      nextSlide : function() {
-//        console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
+      nextSlide: function () {
+        //console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
         if (futureSlides.length > 0) {
 
-          if(activeSlide.getAttribute("data-option") === 'master' &&
+          if (activeSlide.getAttribute("data-option") === 'master' &&
             activeSlide.getAttribute("data-route") === null && totalVotes > 0) {
-//            console.log('decideroute');
+            //console.log('decideroute');
             this.decideRoute();
           }
 
           pastSlides.push(activeSlide);
           activeSlide = futureSlides.shift();
-//               slidfast.ui.slideTo(activeSlide);
+          if(onslyde.mode === 'default'){
+            slidfast.ui.slideTo(activeSlide);
+          }
           groupSlideIndex++;
           this.updateRemotes();
           this.sendMarkup();
-
         } else {
           //move to next group
-//               this.nextGroup();
+          if(onslyde.mode === 'default'){
+            this.nextGroup();
+          }
+        }
+
+        if(onslyde.mode === 'default'){
+          //quick hack for hiding audience address bar
+          var mainScreenAddressBar = document.querySelector(".address");
+          if (mainScreenAddressBar) {
+            document.querySelector(".address").className = 'address-small';
+          }
         }
       },
 
-      prevSlide : function() {
-
+      prevSlide: function () {
+        //console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
         if (pastSlides.length > 0 && groupSlideIndex >= 0) {
           futureSlides.unshift(activeSlide);
           activeSlide = pastSlides.pop();
-//               slidfast.ui.slideTo(activeSlide);
+          if(onslyde.mode === 'default'){
+            slidfast.ui.slideTo(activeSlide);
+          }
           groupSlideIndex--;
-//          console.log('prevSlide' + pastSlides.length + ' ' + groupSlideIndex);
-//          console.log('nextSlide' + futureSlides.length + ' ' + groupSlideIndex);
-
           this.updateRemotes();
           this.sendMarkup();
-
         } else {
-//               this.prevGroup();
+          if(onslyde.mode === 'default'){
+            this.prevGroup();
+          }
         }
       },
 
@@ -1315,14 +1329,15 @@
           activeOptions = [];
           this.checkOptions();
           this.updateRemotes();
+          if(onslyde.mode === 'default'){
+            slidfast.ui.slideTo(activeSlide);
+          }
 
           //reset votes
           currentVotes = {};
           totalVotes = 0;
 
-
           this.sendMarkup();
-
         } else {
           //eop
         }
@@ -1341,11 +1356,10 @@
         }
       },
 
-      prevGroup : function() {
+      prevGroup: function () {
         //console.log('prevGroup ' + pastGroups.length);
         if (pastGroups.length > 0) {
           futureGroups.unshift(activeGroup);
-
           activeGroup.style.display = 'none';
           activeGroup = pastGroups.pop();
           activeGroup.style.display = '';
@@ -1355,37 +1369,39 @@
           //pastSlides = toArray(this.groupSlides(activeGroup));
           //pastSlides.reverse();
           //console.log('pastOptions ' + pastOptions.length);
-          if(pastOptions.length > 0){
+          if (pastOptions.length > 0) {
             //option has been selected for the current group
-            if(activeOption){
+            if (activeOption) {
               activeOption = pastOptions[pastOptions.length - 2];
-            }else{
+            } else {
               //option has not been chose yet in active group, so pop from history
               activeOption = pastOptions.pop();
             }
 
             this.setOption(activeOption);
             pastSlides = futureSlides;
-          }else{
+          } else {
             pastSlides = toArray(this.groupSlides(activeGroup));
             //pastSlides.reverse();
           }
           futureSlides = [];
-          //this was for the old slide deck... allows to go back in history on chosen option
-          //groupSlideIndex = pastSlides.length;
-          //set to 0 for reveal
-          groupSlideIndex = 0;
+          if(onslyde.mode === 'default'){
+            groupSlideIndex = pastSlides.length;
+            activeSlide = pastSlides.pop();
+            var groupOptions = this.groupOptions(activeGroup);
+          }else{
+            groupSlideIndex = 0;
+            activeSlide = pastSlides.pop();
+          }
 
-          activeSlide = pastSlides.pop();
+            this.checkOptions();
+            this.updateRemotes();
+            //console.log('---groupOptions ' + groupOptions);
+            //console.log('activeSlide ' + activeSlide);
 
-//          var groupOptions = this.groupOptions(activeGroup);
-          this.checkOptions();
-          this.updateRemotes();
-          //console.log('---groupOptions ' + groupOptions);
-          //console.log('activeSlide ' + activeSlide);
-
-//               slidfast.ui.slideTo(activeSlide);
-
+          if(onslyde.mode === 'default'){
+            slidfast.ui.slideTo(activeSlide);
+          }
           //reset votes
           currentVotes = {};
           totalVotes = 0;
@@ -1395,18 +1411,17 @@
         }
       },
 
-      groups : function() {
+      groups: function () {
         //return all groups in the DOM
         return document.querySelectorAll(".slide-group");
       },
 
-      groupSlides : function(group) {
+      groupSlides: function (group) {
         //return all slides for a group
-        //return group.querySelectorAll(".slide");
-        return group.querySelectorAll('section');
+        return group.querySelectorAll("section");
       },
 
-      groupOptions : function(group) {
+      groupOptions: function (group) {
         //there are 2 options per group, based on active slide... return them
         activeOptions = [];
         var u = {}, option;
@@ -1427,7 +1442,7 @@
         return activeOptions;
       },
 
-      setOption : function(option) {
+      setOption: function (option) {
         futureSlides = [];
         //try to keep a history of options chosen
         if (pastOptions.length > 0) {
@@ -1447,7 +1462,7 @@
           if (slides[i].getAttribute("data-option") == option || (slides[i].getAttribute("data-option") == 'master' && activeOption != null)) {
             ////console.log(slides[i]);
             futureSlides.push(slides[i]);
-          }else{
+          }else if(onslyde.mode !== 'default'){
             //for reveal
             if (slides[i].getAttribute("data-option") != 'master'){
 //                       console.log(slides[i]);
@@ -1462,7 +1477,7 @@
         activeOptions = [];
       },
 
-      updateRemotes : function() {
+      updateRemotes: function () {
         var activeOptionsString;
 
         if(activeOptions.length >= 1){
@@ -1474,28 +1489,30 @@
         this.connect(activeOptionsString);
         //clear options after sending
 //        activeOptions = [];
+
       },
 
       roulette : function() {
         this.connect("roulette");
       },
 
-      optionVote : function(vote, activeSlide) {
+      optionVote: function (vote, activeSlide) {
         //given vote for a default slide
         var index;
         //if(vote in activeOptions){
         index = activeOptions.indexOf(vote);
-        if(vote in currentVotes){
+        if (vote in currentVotes) {
           currentVotes[vote] += 1;
           ////console.log(currentVotes);
-        }else{
+        } else {
           currentVotes[vote] = 1;
 
         }
         //}
+        ////console.log(vote + ' ' + currentVotes[vote]);
 
         for (var i = 0; i < activeOptions.length; i++) {
-          if(currentVotes.hasOwnProperty(activeOptions[i]))
+          if (currentVotes.hasOwnProperty(activeOptions[i]))
             totalVotes += currentVotes[activeOptions[i]];
         }
 
@@ -1503,50 +1520,61 @@
         barChart.redraw();
       },
 
-      decideRoute : function(){
+      decideRoute: function () {
         //now we need a decision
 
         var values = [];
         var sortedObj = [];
-        for(var opt in currentVotes){
+        //console.log(currentVotes);
+        for (var opt in currentVotes) {
           if (currentVotes.hasOwnProperty(opt)) {
             values.push(currentVotes[opt])
           }
         }
-        values.sort(function(a,b){return b-a});
+        values.sort(function (a, b) {return b-a});
+        //console.log(values);
 
         //todo - check for tie condition
 
         var winner;
-        for(var optb in currentVotes){
+        for (var optb in currentVotes) {
           if (currentVotes.hasOwnProperty(optb)) {
             //based on the sorted values, we'll choose the first one
             //javascript hashes can't be sorted, so this is a rebuild
-            if(values[0] == currentVotes[optb]){
+            if (values[0] == currentVotes[optb]) {
               winner = optb;
             }
           }
         }
-        activeSlide.setAttribute('data-route',winner);
+        activeSlide.setAttribute('data-route', winner);
         //clear votes for next slideGroup
         totalVotes = 0;
-//            console.log('winner' + winner);
+        //console.log('winner' + winner);
         this.setOption(winner);
       },
 
-      handleKeys : function(event) {
+      handleKeys: function (event) {
         switch (event.keyCode) {
           case 39: // right arrow
           case 13: // Enter
           case 32: // space
           case 34: // PgDn
-            slidfast.slides.nextGroup();
+            if(onslyde.mode === 'default'){
+              slidfast.slides.nextSlide();
+            }else{
+              slidfast.slides.nextGroup();
+            }
             event.preventDefault();
             break;
 
           case 37: // left arrow
+//          case 8: // Backspace
           case 33: // PgUp
-            slidfast.slides.prevGroup();
+            if(onslyde.mode === 'default'){
+              slidfast.slides.prevSlide();
+            }else{
+              slidfast.slides.prevGroup();
+            }
             event.preventDefault();
             break;
 
@@ -1574,7 +1602,7 @@
 
     slidfast.html5e = slidfast.prototype = {
       /*jshint sub:true */
-      supports_local_storage:function () {
+      supports_local_storage: function () {
         try {
           return 'localStorage' in window && window['localStorage'] !== null;
         } catch (e) {
@@ -1582,7 +1610,7 @@
         }
       },
 
-      supports_app_cache:function () {
+      supports_app_cache: function () {
         try {
           return 'applicationCache' in window && window['applicationCache'] !== null;
         } catch (e) {
@@ -1590,7 +1618,7 @@
         }
       },
       //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
-      supports_geolocation:function () {
+      supports_geolocation: function () {
         try {
           return 'geolocation' in navigator && navigator['geolocation'] !== null;
         } catch (e) {
@@ -1598,7 +1626,7 @@
         }
       },
 
-      supports_websocket:function () {
+      supports_websocket: function () {
         try {
           return 'WebSocket' in window && window['WebSocket'] !== null;
         } catch (e) {
@@ -1606,7 +1634,7 @@
         }
       },
 
-      supports_orientation:function () {
+      supports_orientation: function () {
         try {
           return 'DeviceOrientationEvent' in window && window['DeviceOrientationEvent'] !== null;
         } catch (e) {
@@ -1614,7 +1642,7 @@
         }
       },
 
-      supports_motion:function () {
+      supports_motion: function () {
         try {
           return 'DeviceMotionEvent' in window && window['DeviceMotionEvent'] !== null;
         } catch (e) {
@@ -1632,10 +1660,8 @@
       }
     };
 
-    var guid = function()
-    {
-      var S4 = function ()
-      {
+    var guid = function () {
+      var S4 = function () {
         return Math.floor(
           Math.random() * 0x10000 /* 65536 */
         ).toString(16);
@@ -1672,7 +1698,7 @@
       return array;
     };
 
-    var toArray = function(obj) {
+    var toArray = function (obj) {
       var array = [];
       // iterate backwards ensuring that length is an UInt32
       for (var i = obj.length >>> 0; i--;) {

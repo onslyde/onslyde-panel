@@ -212,7 +212,8 @@ nav.primary > ul li a {
     padding:  0 0 0 18px;
 }
 
-#nice {
+#nice,
+#speak{
     padding: 15px 0;
     width: 95%;
     font-size: 1.2em;
