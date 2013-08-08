@@ -9,10 +9,11 @@ var voted;
 //disablePoll();
 
 speak.onclick = function(event) {
+  console.log('---', userObject)
   _gaq.push(['_trackEvent', 'onslyde-option1', 'vote']);
   console.log('option1.value',speak.value);
 //  return sendVote(event,speak.value);
-  ws.send('speak:' + document.getElementById('usercontent').innerHTML);
+  ws.send('speak:' + JSON.stringify(userObject));
 };
 
 function sendVote(event,option){
