@@ -1,0 +1,279 @@
+body {
+  font-family: 'Lato', sans-serif;
+  color: #fff;
+}
+
+.bold {
+  font-family: 'Lato-Bold', sans-serif;
+}
+
+.light {
+  font-family: 'Lato-Light', sans-serif;
+}
+
+h2, h3 {
+  color: #343434;
+  text-transform: uppercase;
+}
+
+.primary-header {
+  background-color: #000;
+  position: absolute;
+  top:0;
+  right:0;
+  left:0;
+  height: 70px;
+}
+
+.secondary-header {
+  background-color: #d7d7d7;
+  position: absolute;
+  top:100px;
+  right:0;
+  left:0;
+  height: 35px;
+  z-index: 1;
+  text-transform: uppercase;
+  font-size: 1.8em;
+  padding: 5px 0 5px 30px;
+  color: #343434;
+}
+
+.total-attendees,
+.session-time {
+  float: right;
+  display: inline-block;
+  font-size: 2em;
+  margin: 12px 30px 0 0;
+  /*font-style: italic;*/
+}
+
+.total-attendees #totalCount,
+.session-time #timer {
+  font-style: normal;
+}
+
+.content {
+  position:absolute;
+  top:70px;
+  right:0;
+  left:0;
+  bottom:0;
+}
+/*============================ Left column*/
+.left-col {
+  background-color: #3daa93;
+  width: 60%;
+  height: 100%;
+  float:left;
+}
+
+.speaking-now {
+  margin: 100px 0 0 30px;
+}
+
+.speaking-now div {
+  margin-bottom: 5px;
+}
+
+.speaking-now-title {
+  font-size: 1.8em;
+}
+
+#currentOrg {
+  font-size: 2em;
+  text-transform: uppercase;
+}
+
+#currentSpeaker,
+#currentSpeaker .speaker-details .name{
+  font-size: 3rem;
+  color: #f8f900;
+  text-transform: uppercase;
+  font-family: 'Lato-Bold', sans-serif;
+}
+
+#currentSpeaker .speaker-details .org {
+  font-size: 2rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'Lato-Bold', sans-serif;
+}
+
+#currentSpeaker #speaker-template > img{
+  /*display:none;*/
+}
+
+.panel {
+  margin: 0 0 0 30px;
+}
+
+.panel-list,
+.panelist-details {
+  list-style: none;
+  font-family: 'Lato-Light', sans-serif;
+  margin:0;
+  padding:0;
+}
+
+.panelist-details .name {
+  font-size: 1.8em;
+}
+
+.panelist-details .mod {
+  color: #f8f900
+}
+
+.panel-list > li {
+  width: 46%;
+  float:left;
+  margin: 10px;
+}
+
+.panel-list > li > img {
+  width: 100px;
+  float:left;
+  margin: 0 10px 0 0;
+}
+/*============================ Right column*/
+.right-col {
+  width: 35%;
+  height: 100%;
+  float:left;
+  padding: 0 0 0 20px;
+}
+
+.up-next-container .title {
+  font-size: 2em;
+  color: #3daa93;
+  width: 32%;
+  float:left;
+  text-transform: uppercase;
+  font-family: 'Lato-Bold', sans-serif
+}
+
+.up-next-container #upNext {
+  width: 68%;
+  float:left;
+  color: #343434;
+}
+
+.speaker-list {
+  width: 100%;
+  float:left;
+  margin: 10px;
+  color: #343434;
+  height: 350px;
+  overflow-y: scroll;
+}
+
+.speaker-list #speaker-template {
+  margin: 10px 0 0 0;
+}
+
+#speaker-template {
+  /*clear the float*/
+  overflow: hidden;
+}
+
+#speaker-template > img {
+  width: 75px;
+  float:left;
+  margin: 0 10px 0 0;
+}
+
+.speaker-details {
+  list-style: none;
+  font-family: 'Lato-Light', sans-serif;
+  margin:0;
+  padding:0;
+}
+
+.speaker-details .name {
+  font-size: 1.8em;
+}
+
+.speaker-details .org {
+  font-size: 1.2em;
+}
+
+
+/*===================== sentiment chart*/
+
+.sentiment-container {
+  width:100%;
+  position:relative;
+  height:150px;
+  margin: 100px 0 0 0;
+}
+
+.sentiment-bar1 {
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:50%;
+  left:0;
+  padding: 0 3px 0 0;
+  border-right: 2px solid #777;
+}
+
+.sentiment-bar2 {
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:50%;
+  padding: 0 0 0 3px;
+  border-left: 2px solid #777;
+}
+
+.sentiment-bar2 #sentiment-chart-good {
+  background-color:#3daa93;
+  height:100px;
+  float:left;
+  position: relative;
+}
+
+.sentiment-bar2 #sentiment-chart-good #goodCount {
+  position: absolute;
+  padding: 3px 5px 0 0;
+  top:0;
+  right:0;
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'Lato-Bold';
+}
+
+.sentiment-bar1 #sentiment-chart-bad {
+  background-color:#343434;
+  height:100px;
+  float:right;
+  position: relative;
+}
+
+.sentiment-bar1 #sentiment-chart-bad #badCount {
+  position: absolute;
+  padding: 3px 0 0 5px;
+  top:0;
+  left:0;
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'Lato-Bold';
+}
+
+.bad-label {
+  color: #343434;
+  font-family: 'Lato-Bold';
+  font-size: 1rem;
+  width:100%;
+  text-align:right;
+  margin: 0 0 3px 0;
+}
+
+.good-label {
+  color: #3daa93;
+  font-family: 'Lato-Bold';
+  font-size: 1rem;
+  width:100%;
+  margin: 0 0 3px 0;
+}

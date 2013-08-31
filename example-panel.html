@@ -2,68 +2,146 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>Onslyde Panel</title>
+  <title>Onslyde Panel</title>
 
-    <meta name="description" content="onslyde example">
-    <meta name="author" content="Wesley Hales">
-
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- controls the appearance of the status bar in full-screen mode -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-    <link rel="stylesheet" media="all" href="css/onslyde-1.0.0.panel.css" />
-
-
-
-    <style>
-        .placeholder {
-            height: 125px;
-            width: 85%;
-        }
-    </style>
+  <meta name="description" content="onslyde example">
+  <meta name="author" content="Wesley Hales">
+  <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/edge-panel.css">
 </head>
 <body>
-<div class="address-small">
+<div style="display:none">
+  <div class="address-small">
     <h4 style="text-transform: lowercase;">connect now <span style="color:#13daec;">http://onslyde.com/go/<span id="sessionID"></span></span></h4>
-</div>
-<div id="wtf" class="hide-wtf">
+  </div>
+  <div id="disagree" class="hide-disagree">
     Thumbs Down!!
-</div>
-<div id="nice" class="hide-nice">
+  </div>
+  <div id="agree" class="hide-agree">
     Nice!!!
+  </div>
 </div>
-<div id="stats">
-    <span style="color:#13daec;"><span id="totalCount"></span> Total Attendees </span>
-</div>
-<div id="countdown">
-    <span style="color:#13daec;">Session Time: <span id="timer"></span> </span>
-</div>
+<header class="primary-header">
+  <div class="session-time light">
+    <span><span class="bold" id="timer"></span> session time</span>
+  </div>
+  <div class="total-attendees light">
+    <span><span class="bold" id="totalCount">0</span> connected delegates </span>
+  </div>
+</header>
 
-<div class="panel">
-    <div style="color:#fff;">
-    Wants to speak: <span id="speakerQueue"></span>
-    </div>
-     <hr/>
-    <div style="color:#fff;">
-        Up Next: <span id="upNext"></span>
+<header class="secondary-header bold">
+  Rendering Performance
+</header>
+
+<div class="content">
+
+  <section class="left-col">
+
+    <div class="speaking-now">
+      <div class="speaking-now-title light">Speaking now:</div>
+      <div id="currentSpeaker" class="bold">Discussion</div>
     </div>
 
-    <hr/>
-    <div style="color:#fff;">
-        Curent Speaker: <span id="currentSpeaker"></span>
+    <div class="panel">
+
+      <h3>Panel</h3>
+
+      <ul class="panel-list">
+        <li>
+          <img src="http://edgeconf.com/images/panelists/andre-behrens.jpg" alt="Andre Behrens" />
+          <ul class="panelist-details">
+            <li class="name">Andre Behrens</li>
+            <li class="org">The New York Times</li>
+            <li class="mod">Moderator</li>
+          </ul>
+        </li>
+        <li>
+          <img src="http://edgeconf.com/images/panelists/jonathan-klein.jpg" alt="Jonathan Klein" />
+          <ul class="panelist-details">
+            <li class="name">Jonathan Klein</li>
+            <li class="org">Etsy</li>
+          </ul>
+        </li>
+        <li>
+          <img src="http://edgeconf.com/images/panelists/paul-lewis.jpg" alt="Paul Lewis" />
+          <ul class="panelist-details">
+            <li class="name">Paul Lewis</li>
+            <li class="org">Google</li>
+          </ul>
+        </li>
+        <li>
+          <img src="http://edgeconf.com/images/panelists/ariya-hidayat.jpg" alt="Ariya Hidayat" />
+          <ul class="panelist-details">
+            <li class="name">Ariya Hidayat</li>
+            <li class="org">Sencha</li>
+          </ul>
+        </li>
+        <li>
+          <img src="http://edgeconf.com/images/panelists/joshua-peek.jpg" alt="Joshua Peek" />
+          <ul class="panelist-details">
+            <li class="name">Joshua Peek</li>
+            <li class="org">Github</li>
+            <li class="mod"></li>
+          </ul>
+        </li>
+        <li>
+          <img src="http://edgeconf.com/images/panelists/eli-fidler.jpg" alt="Eli Fidler" />
+          <ul class="panelist-details">
+            <li class="name">Eli Fidler</li>
+            <li class="org">BlackBerry</li>
+          </ul>
+        </li>
+      </ul>
     </div>
+
+  </section>
+
+  <section class="right-col">
+
+    <div class="sentiment-container">
+      <div class="sentiment-bar1">
+        <div class="bad-label">disagree</div>
+        <div id="sentiment-chart-bad"><span id="badCount">0</span></div>
+      </div>
+      <div class="sentiment-bar2">
+        <div class="good-label">agree</div>
+        <div id="sentiment-chart-good"><span id="goodCount">0</span></div>
+      </div>
+    </div>
+
+    <h3><span id="queuedSpeakers"></span> Speakers Queued</h3>
+
+    <div class="up-next-container">
+      <div class="title">Up Next:</div> <div id="upNext"></div>
+    </div>
+
+
+    <section class="speaker-list" id="speakerQueue">
+
+    </section>
+
+    <div style="display:none">
+      <div id="speaker-template">
+        <img src="" alt="" />
+        <ul class="speaker-details">
+          <li class="name"></li>
+          <li class="org"></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script type="text/javascript" src="js/onslyde-1.0.0.panel.js" ></script>
 <script type="text/javascript">
 
-    onslyde({
-        panel: {sessionID: 167, mode:'default'}
-    });
+  onslyde({
+    panel: {sessionID: 167, mode:'default'}
+  });
 </script>
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="js/libs/jquery.flot.js"></script>
 </body>
 </html>

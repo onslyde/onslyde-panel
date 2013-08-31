@@ -17,8 +17,16 @@ function checkAuth() {
 
 function handleAuthResult(authResult) {
   var authorizeButton = document.getElementById('authorize-button');
+  var speakButton = document.getElementById('speak');
+
   if (authResult && !authResult.error) {
     authorizeButton.style.visibility = 'hidden';
+    speakButton.onclick = function(event) {
+      _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
+      ws.send('speak:' + JSON.stringify(userObject));
+      speak.disabled = true;
+      speak.value = 'You are queued to speak';
+    };
     makeApiCall();
   } else {
     authorizeButton.style.visibility = '';
@@ -40,14 +48,15 @@ function makeApiCall() {
       'userId': 'me'
     });
     request.execute(function(resp) {
-      var heading = document.createElement('h4');
-      var image = document.createElement('img');
-      image.src = resp.image.url;
-      heading.appendChild(image);
-      heading.appendChild(document.createTextNode(resp.displayName));
+//      var heading = document.createElement('h4');
+//      var image = document.createElement('img');
+//      image.src = resp.image.url;
+//      heading.appendChild(image);
+//      heading.appendChild(document.createTextNode(resp.displayName));
       userObject.name = resp.displayName;
       userObject.pic = resp.image.url;
-      document.getElementById('usercontent').appendChild(heading);
+      document.querySelector('#speak').value = 'I want to speak';
+//      document.getElementById('usercontent').appendChild(heading);
     });
   });
   gapi.client.load('oauth2', 'v2', function() {

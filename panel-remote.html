@@ -2,83 +2,84 @@
 <html lang="en">
 
 <head>
-<title>Onslyde Remote</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
-<!-- enable full-screen mode -->
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<!-- controls the appearance of the status bar in full-screen mode -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-
-<link href="css/panel-remote.css?v=1" media="screen" rel="stylesheet" type="text/css" />
+  <title>Onslyde Remote</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+  <!-- enable full-screen mode -->
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <!-- controls the appearance of the status bar in full-screen mode -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta http-equiv="cache-control" content="no-cache" />
+  <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+  <link href="css/panel-remote.css?v=1" media="screen" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
-<script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-31854873-3']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-</script>
 <div id="roulette"></div>
 <div id="browser">
 
-    <h2 id="vote-label">Get Ready!</h2>
-    <nav class="primary">
-        <ul>
-            <li>
-                <input id="nice" class="button" type="submit" value="Agree" />
-                <input id="wtf" class="button" type="submit" value="Disagree"/>
-                <input id="speak" class="button" type="submit" value="I want to speak!" />
-            </li>
+  <h2 id="vote-label">Get Ready!</h2>
+  <nav class="primary">
+    <ul>
+      <li>
+        <input id="agree" class="button" type="submit" value="Agree" />
+        <input id="disagree" class="button" type="submit" value="Disagree"/>
+        <input id="speak" class="button" type="submit" value="I want to speak!" />
+      </li>
 
-        </ul>
-    </nav>
+    </ul>
+  </nav>
+  <div class="auth-holder">
     <button id="authorize-button" style="visibility: hidden">Authorize</button>
     <div id="usercontent"></div>
-    <div id="slide-group-container">
+  </div>
 
-        <div id="front" class="normal">
+  <div id="slide-group-container">
 
-            <div id="about-page" class="slide">
-                <div id="from-slide">
-                   Hi, This is the onslyde remote. Audience members will connect to your session and see this remote. The content/remote will update as you move through the slides.
-                </div>
-                <p>
+    <div id="front" class="normal">
 
-                    <br/>
-                    <a href="https://twitter.com/onslyde" target="_blank">Follow @onslyde</a>
-                </p>
-
-            </div>
-
+      <div id="about-page" class="slide">
+        <div id="from-slide">
+          Hi, This is the onslyde remote. Audience members will connect to your session and see this remote. The content/remote will update as you move through the slides.
         </div>
+        <p>
+
+          <br/>
+          <a href="https://twitter.com/onslyde" target="_blank">Follow @onslyde</a>
+        </p>
+
+      </div>
 
     </div>
 
+  </div>
+
 </div>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js" ></script>
+<script type="text/javascript" src="js/gplus-oauth.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 <script type="text/javascript" src="js/panel-remote.js?v=2" ></script>
 <script type="text/javascript" src="js/onslyde-1.0.0.panel.js?v=1" ></script>
 <script type="text/javascript">
 
+  onslyde({
+    panelRemote: {sessionID: (getParameterByName("session") || 194)}
+  });
 
-    onslyde({
-        panelRemote: {sessionID: (getParameterByName("session") || 194)}
-    });
-
-    //quick fix until finish refactor
-    window.slidfast = onslyde;
 </script>
-<script type="text/javascript" src="js/gracefulWebSocket.js" ></script>
-<script type="text/javascript" src="js/gplus-oauth.js" ></script>
-<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+<script type="text/javascript" src="js/gracefulWebSocket.js"></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31854873-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </body>
 </html>

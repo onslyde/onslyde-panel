@@ -1,6 +1,22 @@
-/*!
- * Copyright (c) Wesley Hales
- * Available under MIT (see LICENSE)
+/*
+ Copyright (c) 2012-2013 Wesley Hales and contributors (see git log)
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to
+ deal in the Software without restriction, including without limitation the
+ rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 (function (window, document, undefined) {
@@ -151,7 +167,12 @@
         var max = 999;
         if (!localStorage['onslyde.attendeeIP']) {
           aip = createRandom() + '.' + createRandom() + '.' + createRandom() + '.' + createRandom();
-          localStorage['onslyde.attendeeIP'] = aip;
+          //if in private browsing mode this will fail
+          try{
+            localStorage['onslyde.attendeeIP'] = aip;
+          }catch(e){
+
+          }
         } else {
           aip = localStorage['onslyde.attendeeIP'];
         }
@@ -173,13 +194,16 @@
           var location = 'ws://' + ip + ':8081/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         } else {
-          //we sent end a mock object from jquery polling
+          //we sent in a mock object from jquery polling
+          //still need to setup ip in localStorage
+          this.getip();
+
           ws = websocket;
         }
 
         ws.onopen = function () {
           isopen = true;
-           console.log('onopen',initString,typeof initString !== 'undefined')
+//           console.log('onopen',initString,typeof initString !== 'undefined')
           onslyde.ws._send('user:' + username);
 
           if (typeof initString !== 'undefined') {
@@ -193,9 +217,13 @@
       },
 
       _onmessage: function (m) {
+//        console.log('---onmessage:', m.data);
         if (m.data) {
-
-          if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
+          if(typeof m.data === 'object'){
+            if(m.data.onslydeEvent.sessionID !== 0){
+              m.data.onslydeEvent.fire();
+            }
+          }else if (m.data.indexOf('sessionID":"' + sessionID) > 0) {
             try {
               //avoid use of eval...
               var event = (m.data);
@@ -233,10 +261,10 @@
       pollcount,
       groupSlideIndex = 0,
       groupIndex = 0,
-      currentVotes = {},
       totalVotes = 0,
       speakerList = [],
-      currentSpeaker;
+      currentSpeaker,
+      currentVotes = {good:0,bad:0};
 
     onslyde.panel = onslyde.prototype = {
 
@@ -252,29 +280,40 @@
         }, false);
 
         window.addEventListener('speak', function(e) {
-          var speaker = JSON.parse(e.name);
-          onslyde.panel.queueSpeaker(speaker);
+          var speaker = JSON.parse(e.attendee);
+          try {
+            if (speaker.name !== '') {
+              speakerList.push({'speaker':speaker,'ip':e.ip});
+              onslyde.panel.queueSpeaker(speaker, e.ip);
+            }
+          } catch (e) {
+            console.log('problem queueing speaker:',e);
+          }
         }, false);
 
         window.addEventListener('clearRoute', function(e) {
           slidfast.slides.clearRoute();
         }, false);
 
-        window.addEventListener('wtf', function(e) {
-          var wtf = document.getElementById("wtf");
-          wtf.innerHTML = "Thumbs Down!";
-          if(wtf){
-            wtf.className = "show-wtf transition";
-            setTimeout(function(){wtf.className = "hide-wtf transition"},800)
+        window.addEventListener('disagree', function(e) {
+          var disagree = document.getElementById("disagree");
+          currentVotes.bad++
+          onslyde.panel.drawSentimentChart();
+          disagree.innerHTML = "Thumbs Down!";
+          if(disagree){
+            disagree.className = "show-disagree transition";
+            setTimeout(function(){disagree.className = "hide-disagree transition"},800)
           }
         }, false);
 
-        window.addEventListener('nice', function(e) {
-          var nice = document.getElementById("nice");
-          nice.innerHTML = "Nice!";
-          if(nice){
-            nice.className = "show-nice nice transition";
-            setTimeout(function(){nice.className = "hide-nice transition"},800)
+        window.addEventListener('agree', function(e) {
+          var agree = document.getElementById("agree");
+          currentVotes.good++
+          onslyde.panel.drawSentimentChart();
+          agree.innerHTML = "agree!";
+          if(agree){
+            agree.className = "show-agree agree transition";
+            setTimeout(function(){agree.className = "hide-agree transition"},800)
           }
         }, false);
         //-----------end event listeners
@@ -283,13 +322,26 @@
         //start timer
         var timerHolder = document.getElementById('timer');
         var startsecond = 0;
+        var eventDate = new Date();
+
         setInterval(function(){
-          timerHolder.innerHTML = (new Date());
+          var now = new Date();
+
+          var diff = (now-eventDate);
+
+          var currentHours = Math.floor(diff / 3600000);
+          var currentMinutes = Math.floor((diff % 3600000) / 60000);
+          var currentSeconds = Math.floor(((diff % 3600000) % 60000) / 1000);
+          currentHours = (currentHours < 10 ? "0" : "") + currentHours;
+          currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+          currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+          timerHolder.innerHTML = currentHours + ':' + currentMinutes + ":" + currentSeconds;
         },1000);
 
 
         this.connect('::connect::');
         setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+        this.drawSentimentChart();
 
         document.getElementById('sessionID').innerHTML = sessionID;
       },
@@ -314,53 +366,95 @@
         document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
       },
 
-      queueSpeaker : function(speaker) {
-        speakerList.push(speaker);
-        console.log('speakerList',speakerList);
-        var image = document.createElement('img');
+      createSpeakerNode : function(speaker,ip,fn) {
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(document.getElementById('speaker-template').cloneNode(true));
+        var image = fragment.querySelector('img');
         image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.upNextSpeaker(speaker);};
-        document.getElementById('speakerQueue').appendChild(image);
+        image.onclick = function(){fn(speaker,ip);};
+        fragment.querySelector('.name').innerHTML = speaker.name;
+        fragment.querySelector('.org').innerHTML = 'test org';
+        return fragment;
       },
 
-      upNextSpeaker : function(speaker) {
-        var image = document.createElement('img');
-        image.src = speaker.pic;
-        image.onclick = function(){onslyde.panel.speakerLive(speaker);};
-        document.getElementById('upNext').appendChild(image);
-        this.removeSpeaker(speaker.email);
+      queueSpeaker : function(speaker,ip) {
+        //passing in speaker data along with necessary onclick function for moderators
+        document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.upNextSpeaker));
+        //update count
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      speakerLive : function(speaker) {
-        var image = document.createElement('img');
-        image.src = speaker.pic;
+      upNextSpeaker : function(speaker,ip) {
+        //passing in speaker data along with necessary onclick function for moderators
+        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+        //remove from list
+        onslyde.panel.removeSpeakerFromList(speaker.email);
+        //adjust UI
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+      },
+
+      speakerLive : function(speaker,ip) {
         document.getElementById('currentSpeaker').innerHTML = '';
-        document.getElementById('currentSpeaker').appendChild(image);
-        //should we automatically move the next in the list to "up next"
+        document.getElementById('currentSpeaker').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
+        //should we automatically move the next in the list to "up next" ?
         //for now just remove.
         document.getElementById('upNext').innerHTML = '';
+
+        //activate new poll for new speaker
+        //server side
+        var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
+
+        //client side
+        currentVotes.good = 0;
+        currentVotes.bad = 0;
+        onslyde.panel.drawSentimentChart();
+
+        onslyde.panel.connect(activeOptionsString);
+        onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
       },
 
-      removeSpeaker : function(email) {
+      removeSpeakerFromList : function(email) {
         //removes speaker from queue
         for(var i=0;i < speakerList.length;i++){
-          if(speakerList[i].email === email){
+          if(speakerList[i].speaker.email === email){
             speakerList.splice(i,1);
             console.log('removed speaker: ', email);
           }
         }
-        console.log('speakerList after remove',speakerList);
+//        console.log('speakerList after remove',speakerList);
         //todo - rebuild list - improve this
         document.getElementById('speakerQueue').innerHTML = '';
 
         for(var j=0;j < speakerList.length;j++){
-          var image = document.createElement('img');
-          image.src = speakerList[j].pic;
-          console.log(speakerList[j])
-          image.onclick = function(){onslyde.panel.upNextSpeaker(speakerList[j]);};
-          document.getElementById('speakerQueue').appendChild(image);
+          onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
         }
 
+      },
+
+      removeSpeakerFromLive : function() {
+        currentVotes.good = 0;
+        currentVotes.bad = 0;
+        onslyde.panel.drawSentimentChart();
+        document.getElementById('currentSpeaker').innerHTML = 'Discussion';
+        onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
+        var activeOptionsString = 'activeOptions:null,null,Discussion';
+        onslyde.panel.connect(activeOptionsString);
+      },
+
+      drawSentimentChart : function() {
+        if(currentVotes.good === 0 && currentVotes.bad === 0){
+          //reset chart
+          document.getElementById('sentiment-chart-good').style.width = '5%';
+          document.getElementById('sentiment-chart-bad').style.width = '5%';
+        }else{
+          var goodVotes = (currentVotes.good / (currentVotes.good + currentVotes.bad));
+          var badVotes = (currentVotes.bad / (currentVotes.good + currentVotes.bad));
+          document.getElementById('sentiment-chart-good').style.width = (goodVotes * 100) + '%';
+          document.getElementById('sentiment-chart-bad').style.width =  (badVotes * 100) + '%';
+//           document.getElementById('sentiment-chart-bad').style.marginRight = (badVotes * 100) + '%';
+        }
+        document.getElementById('goodCount').innerHTML = currentVotes.good;
+        document.getElementById('badCount').innerHTML = currentVotes.bad;
       },
 
       wsCount : function() {
@@ -371,17 +465,14 @@
         return pollcount;
       },
 
-      sendMarkup : function() {
+      sendMarkup : function(markup) {
         // see if there's anything on the new slide to send to remotes EXPERIMENTAL
-        if(activeSlide !== 'undefined'){
-          for(var i = 0; i < activeSlide.querySelectorAll('.send').length;i++) {
-            //send to remotes
-            var outerHtml = activeSlide.querySelectorAll('.send')[i].outerHTML;
-            outerHtml = outerHtml.replace(/'/g, "&#39;");
-            var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(outerHtml)});
-            this.connect(remoteMarkup);
-          }
-        }
+
+        //send to remotes
+        var outerHtml = markup.replace(/'/g, "&#39;");
+        var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(outerHtml)});
+        this.connect(remoteMarkup);
+
       },
 
       updateRemotes: function () {
@@ -423,8 +514,8 @@
             totalVotes += currentVotes[activeOptions[i]];
         }
 
-        barChart.vote(vote);
-        barChart.redraw();
+//        barChart.vote(vote);
+//        barChart.redraw();
       },
 
       handleKeys: function (event) {
