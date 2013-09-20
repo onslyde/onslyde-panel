@@ -65,7 +65,7 @@
 
       hideURLBar: function () {
         //hide the url bar on mobile devices
-        setTimeout(scrollTo, 0, 0, 1);
+        setTimeout(window.scrollTo, 0, 0, 1);
       },
 
       init: function () {
@@ -80,8 +80,7 @@
       },
 
       ajax: function (url, callback, async) {
-        var req = init();
-        req.onreadystatechange = processRequest;
+
 
         function init() {
           if (window.XMLHttpRequest) {
@@ -91,17 +90,22 @@
           }
         }
 
+        var req = init();
+
+
         function processRequest() {
-          if (req.readyState === 4) {
-            if (req.status === 200) {
+          if (req.readyState === 4 && req.status === 200) {
+
               if (callback) {
                 callback(req.responseText, url);
               }
-            } else {
-              // handle error
-            }
+
+          } else {
+            // handle error
           }
         }
+
+        req.onreadystatechange = processRequest;
 
         this.doGet = function () {
 //          req.open("GET", url + "?timestamp=" + new Date().getTime(), async);
@@ -161,7 +165,7 @@
 
         var createRandom = function () {
           return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+        };
         var aip;
         var min = 255;
         var max = 999;
@@ -217,6 +221,7 @@
       },
 
       _onmessage: function (m) {
+        /*jshint -W054 */
 //        console.log('---onmessage:', m.data);
         if (m.data) {
           if(typeof m.data === 'object'){
@@ -255,7 +260,6 @@
     };
 
     var activeSlide,
-      csessionID,
       activeOptions = [],
       wscount,
       pollcount,
@@ -264,7 +268,12 @@
       totalVotes = 0,
       speakerList = [],
       currentSpeaker,
-      currentVotes = {good:0,bad:0};
+      activeOptionsString,
+      propsList = [],
+      rollingAverageEnabled = true,
+      currentVotes = {agree:0, disagree:0},
+      queueTitle,
+      connectInfoMode = false;
 
     onslyde.panel = onslyde.prototype = {
 
@@ -283,41 +292,46 @@
           var speaker = JSON.parse(e.attendee);
           try {
             if (speaker.name !== '') {
-              speakerList.push({'speaker':speaker,'ip':e.ip});
               onslyde.panel.queueSpeaker(speaker, e.ip);
             }
-          } catch (e) {
-            console.log('problem queueing speaker:',e);
+          } catch (err) {
+            console.log('problem queueing speaker:',err);
           }
         }, false);
 
-        window.addEventListener('clearRoute', function(e) {
-          slidfast.slides.clearRoute();
+        window.addEventListener('disagree', function (e) {
+          handleProps('disagree');
         }, false);
 
-        window.addEventListener('disagree', function(e) {
-          var disagree = document.getElementById("disagree");
-          currentVotes.bad++
-          onslyde.panel.drawSentimentChart();
-          disagree.innerHTML = "Thumbs Down!";
-          if(disagree){
-            disagree.className = "show-disagree transition";
-            setTimeout(function(){disagree.className = "hide-disagree transition"},800)
-          }
-        }, false);
-
-        window.addEventListener('agree', function(e) {
-          var agree = document.getElementById("agree");
-          currentVotes.good++
-          onslyde.panel.drawSentimentChart();
-          agree.innerHTML = "agree!";
-          if(agree){
-            agree.className = "show-agree agree transition";
-            setTimeout(function(){agree.className = "hide-agree transition"},800)
-          }
+        window.addEventListener('agree', function (e) {
+          handleProps('agree');
         }, false);
         //-----------end event listeners
 
+        function handleProps(type) {
+          var prop = document.getElementById(type);
+          currentVotes[type]++;
+          //add to scheduled list of votes/props for rolling average
+          propsList.push({time:new Date(), type:type});
+          //draw chart for this vote
+          onslyde.panel.drawSentimentChart();
+          if (prop) {
+            prop.className = 'show-' + type + ' transition';
+            setTimeout(function () {
+              prop.className = 'hide-' + type + ' transition';
+            }, 800);
+          }
+        }
+
+        function manageRollingAverageVote(nowDate) {
+          for (var i = 0; i < propsList.length; i++) {
+            if ((nowDate - propsList[i].time) > 15000) {
+              currentVotes[propsList[i].type]--;
+              propsList.splice(i, 1);
+              onslyde.panel.drawSentimentChart();
+            }
+          }
+        }
 
         //start timer
         var timerHolder = document.getElementById('timer');
@@ -327,7 +341,11 @@
         setInterval(function(){
           var now = new Date();
 
-          var diff = (now-eventDate);
+          if (rollingAverageEnabled) {
+            manageRollingAverageVote(now);
+          }
+
+          var diff = (now - eventDate);
 
           var currentHours = Math.floor(diff / 3600000);
           var currentMinutes = Math.floor((diff % 3600000) / 60000);
@@ -335,15 +353,39 @@
           currentHours = (currentHours < 10 ? "0" : "") + currentHours;
           currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
           currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
           timerHolder.innerHTML = currentHours + ':' + currentMinutes + ":" + currentSeconds;
+
+
         },1000);
 
 
+        //set the active options for opening discussion
+        activeOptionsString = 'activeOptions:null,null,Discussion';
+
         this.connect('::connect::');
-        setTimeout(function(){onslyde.panel.updateRemotes();},1000);
+        setTimeout(function () {
+          onslyde.panel.updateRemotes();
+        }, 1000);
+
+        document.getElementById('sessionID').innerHTML = this.calculateConnectString(sessionID);
+
+        //hide the queued speaker title and show the connect info
+        queueTitle = document.querySelector('.queue-title');
+        queueTitle.style.display = 'none';
+
         this.drawSentimentChart();
 
-        document.getElementById('sessionID').innerHTML = sessionID;
+      },
+
+      calculateConnectString:function (sessionID) {
+        var lookup = ['x', 'b', 'z', 'd', 'y', 'f', 'r', 'h', 's', 'j'];
+        var key = sessionID.toString().split('');
+        var connectString = '';
+        for (var i = 0; i < key.length; i++) {
+          connectString += lookup[key[i]];
+        }
+        return connectString;
       },
 
       connect : function(initString) {
@@ -360,101 +402,214 @@
         }
       },
 
-      updateDeck : function(wsc,pc) {
-        wscount = wsc;
-        pollcount = pc;
-        document.getElementById('totalCount').innerHTML = (parseInt(wsc,10) + parseInt(pc,10));
+      toggleConnectInfo : function(){
+        if(!connectInfoMode){
+          document.getElementById("panel-container").className = "blur";
+          document.getElementById("modal").className = "visible";
+          document.getElementById("modal-connect-string").innerHTML = document.querySelector('.connect-url').innerHTML;
+          connectInfoMode = true;
+        }else{
+          document.getElementById("panel-container").className = '';
+          document.getElementById("modal").className = '';
+          connectInfoMode = false;
+        }
       },
 
-      createSpeakerNode : function(speaker,ip,fn) {
+      toggleRollingAverage:function () {
+        rollingAverageEnabled = !rollingAverageEnabled;
+        if(!rollingAverageEnabled){
+          document.querySelector('.sentiment-bar1').style.borderRightColor = '#000';
+          document.querySelector('.sentiment-bar2').style.borderLeftColor = '#000';
+        }else{
+          document.querySelector('.sentiment-bar1').style.borderRightColor = '#777';
+          document.querySelector('.sentiment-bar2').style.borderLeftColor = '#777';
+        }
+
+      },
+
+      updateDeck : function(wsc,pc) {
+        var countHolder = document.getElementById('totalCount');
+        wscount = wsc;
+        pollcount = pc;
+        countHolder.innerHTML = (parseInt(wsc, 10) + parseInt(pc, 10));
+      },
+
+      createSpeakerNode:function (speaker, ip, fn) {
         var fragment = document.createDocumentFragment();
         fragment.appendChild(document.getElementById('speaker-template').cloneNode(true));
         var image = fragment.querySelector('img');
         image.src = speaker.pic;
-        image.onclick = function(){fn(speaker,ip);};
+        image.onclick = function () {
+          fn(speaker, ip);
+        };
         fragment.querySelector('.name').innerHTML = speaker.name;
-        fragment.querySelector('.org').innerHTML = 'test org';
+
+        //do speaker lookup (if local JSON is provided)
+        //todo - move this out to plugin
+        try{
+        var attendeesLookup = getAttendees();
+        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
+          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
+            var attendee = attendeesLookup[i];
+            var fullName = attendee.FirstName + ' ' + attendee.Surname;
+            if(speaker.name === fullName){
+              speaker.org = attendee.Company;
+              break;
+            }else if(speaker.email === attendee.Email){
+              speaker.org = attendee.Company;
+              break;
+            }else{
+              speaker.org = '';
+            }
+          }
+        }
+        }catch(e){
+          console.log('fix this');
+        }
+
+        fragment.querySelector('.org').innerHTML = speaker.org;
         return fragment;
       },
 
-      queueSpeaker : function(speaker,ip) {
-        //passing in speaker data along with necessary onclick function for moderators
-        document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.upNextSpeaker));
-        //update count
-        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+      queueSpeaker:function (speaker, ip) {
+        var speakerIsQueued = false;
+        for (var i = 0, len = speakerList.length; i < len; i++) {
+          speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+        }
+        //if speaker is already queued remove them
+        if (speakerIsQueued) {
+          onslyde.panel.removeSpeakerFromList(speaker.email);
+        } else {
+          speakerList.push({'speaker':speaker, 'ip':ip});
+          //passing in speaker data along with necessary onclick function for moderators
+          document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
+        }
+
+        //hide/show the header
+        if(speakerList.length > 0){
+          queueTitle.style.display = '';
+          document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+        }else if(speakerList.length === 0){
+          queueTitle.style.display = 'none';
+        }
+
       },
 
-      upNextSpeaker : function(speaker,ip) {
+      upNextSpeaker:function (speaker, ip) {
         //passing in speaker data along with necessary onclick function for moderators
-        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.speakerLive));
+        document.getElementById('upNext').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
         //remove from list
         onslyde.panel.removeSpeakerFromList(speaker.email);
         //adjust UI
         document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      speakerLive : function(speaker,ip) {
-        document.getElementById('currentSpeaker').innerHTML = '';
-        document.getElementById('currentSpeaker').appendChild(onslyde.panel.createSpeakerNode(speaker,ip,onslyde.panel.removeSpeakerFromLive));
+      speakerLive:function (speaker, ip) {
+        var currentSpeakerNode = document.getElementById('currentSpeaker');
+        currentSpeakerNode.innerHTML = '';
+        currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.removeSpeakerFromLive));
         //should we automatically move the next in the list to "up next" ?
         //for now just remove.
-        document.getElementById('upNext').innerHTML = '';
-
+//        document.getElementById('upNext').innerHTML = '';
+        //remove from list
+        onslyde.panel.removeSpeakerFromList(speaker.email);
         //activate new poll for new speaker
         //server side
-        var activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
+        activeOptionsString = 'activeOptions:null,null,' + speaker.name + "," + ip;
 
         //client side
-        currentVotes.good = 0;
-        currentVotes.bad = 0;
-        onslyde.panel.drawSentimentChart();
+        onslyde.panel.resetAllVotes();
 
+        var twitterHandle = (speaker.twitter ? '@' + speaker.twitter : speaker.name);
         onslyde.panel.connect(activeOptionsString);
-        onslyde.panel.sendMarkup('<b>Currently Speaking:</b> '  + speaker.name);
+        onslyde.panel.sendMarkup('' +
+          '<span class="currently-speaking">Currently Speaking:</span><span class="speaker-name">' + speaker.name + '</span>' +
+          '<span class="tweet-button"><a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to ' + twitterHandle + ' talk about... at #edgeconf') + '" target="_blank"><i class="pictogram">&#62217;</i>Tweet what ' + speaker.name.split(' ')[0] + ' just said</a></span>' +
+          '');
+
+
+        //adjust UI
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
       },
 
-      removeSpeakerFromList : function(email) {
+      removeSpeakerFromList:function (email) {
+        var speakerWasQueued = false;
         //removes speaker from queue
-        for(var i=0;i < speakerList.length;i++){
-          if(speakerList[i].speaker.email === email){
-            speakerList.splice(i,1);
-            console.log('removed speaker: ', email);
+        for (var i = 0; i < speakerList.length; i++) {
+          if (speakerList[i].speaker.email === email) {
+            speakerList.splice(i, 1);
+            speakerWasQueued = true;
           }
         }
-//        console.log('speakerList after remove',speakerList);
-        //todo - rebuild list - improve this
-        document.getElementById('speakerQueue').innerHTML = '';
 
-        for(var j=0;j < speakerList.length;j++){
-          onslyde.panel.queueSpeaker(speakerList[j].speaker,speakerList[j].ip);
+        //check for on the fly adding of speaker to "now speaking" from panel members
+        if (speakerWasQueued) {
+          //        console.log('speakerList after remove',speakerList);
+          //todo - rebuild list - improve this
+          document.getElementById('speakerQueue').innerHTML = '';
+
+          for (var j = 0; j < speakerList.length; j++) {
+            onslyde.panel.queueSpeaker(speakerList[j].speaker, speakerList[j].ip);
+          }
         }
 
       },
 
-      removeSpeakerFromLive : function() {
-        currentVotes.good = 0;
-        currentVotes.bad = 0;
-        onslyde.panel.drawSentimentChart();
+      clearQueue:function () {
+        speakerList = [];
+        queueTitle.style.display = 'none';
+        document.getElementById('speakerQueue').innerHTML = '';
+        onslyde.panel.resetAllVotes();
+        activeOptionsString = 'activeOptions:null,null,Discussion';
+
+        onslyde.panel.connect(activeOptionsString);
+        document.getElementById('queuedSpeakers').innerHTML = speakerList.length;
+      },
+
+      removeSpeakerFromLive:function () {
+        onslyde.panel.resetAllVotes();
         document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
-        var activeOptionsString = 'activeOptions:null,null,Discussion';
+        activeOptionsString = 'activeOptions:null,null,Discussion';
+
         onslyde.panel.connect(activeOptionsString);
       },
 
-      drawSentimentChart : function() {
-        if(currentVotes.good === 0 && currentVotes.bad === 0){
+      resetAllVotes:function () {
+        currentVotes.agree = 0;
+        currentVotes.disagree = 0;
+        onslyde.panel.drawSentimentChart();
+        propsList = [];
+      },
+
+      drawSentimentChart:function () {
+        var agreebar = document.getElementById('sentiment-chart-agree'),
+          disagreebar = document.getElementById('sentiment-chart-disagree'),
+          agreeCount = document.getElementById('agreeCount'),
+          disagreeCount = document.getElementById('disagreeCount');
+        if (currentVotes.agree === 0 && currentVotes.disagree === 0) {
           //reset chart
-          document.getElementById('sentiment-chart-good').style.width = '5%';
-          document.getElementById('sentiment-chart-bad').style.width = '5%';
-        }else{
-          var goodVotes = (currentVotes.good / (currentVotes.good + currentVotes.bad));
-          var badVotes = (currentVotes.bad / (currentVotes.good + currentVotes.bad));
-          document.getElementById('sentiment-chart-good').style.width = (goodVotes * 100) + '%';
-          document.getElementById('sentiment-chart-bad').style.width =  (badVotes * 100) + '%';
-//           document.getElementById('sentiment-chart-bad').style.marginRight = (badVotes * 100) + '%';
+          agreebar.style.width = '10%';
+          disagreebar.style.width = '10%';
+        } else {
+          var agreeVotes = (currentVotes.agree / (currentVotes.agree + currentVotes.disagree));
+          var disagreeVotes = (currentVotes.disagree / (currentVotes.agree + currentVotes.disagree));
+          agreebar.style.width = (agreeVotes * 100) + '%';
+          disagreebar.style.width = (disagreeVotes * 100) + '%';
         }
-        document.getElementById('goodCount').innerHTML = currentVotes.good;
-        document.getElementById('badCount').innerHTML = currentVotes.bad;
+
+        if(currentVotes.agree !== parseInt(agreeCount.innerHTML,10)){
+          agreeCount.innerHTML = currentVotes.agree;
+          agreeCount.className = 'bump-out';
+          setTimeout(function(){agreeCount.className = 'bump-in';},200);
+        }
+
+        if(currentVotes.disagree !== parseInt(disagreeCount.innerHTML,10)){
+          disagreeCount.innerHTML = currentVotes.disagree;
+          disagreeCount.className = 'bump-out';
+          setTimeout(function(){disagreeCount.className = 'bump-in';},200);
+        }
+
       },
 
       wsCount : function() {
@@ -465,12 +620,12 @@
         return pollcount;
       },
 
-      sendMarkup : function(markup) {
+      sendMarkup:function (markup) {
         // see if there's anything on the new slide to send to remotes EXPERIMENTAL
 
         //send to remotes
         var outerHtml = markup.replace(/'/g, "&#39;");
-        var remoteMarkup = JSON.stringify({remoteMarkup : encodeURIComponent(outerHtml)});
+        var remoteMarkup = JSON.stringify({remoteMarkup:encodeURIComponent(outerHtml)});
         this.connect(remoteMarkup);
 
       },
@@ -478,9 +633,9 @@
       updateRemotes: function () {
         var activeOptionsString;
 
-        if(activeOptions.length >= 1){
+        if (activeOptions.length >= 1) {
           activeOptionsString = 'activeOptions:' + activeOptions + ',' + groupIndex + ':' + groupSlideIndex;
-        }else{
+        } else {
           activeOptionsString = 'activeOptions:null,null,' + groupIndex + ':' + groupSlideIndex;
         }
         console.log(activeOptionsString);
@@ -510,8 +665,9 @@
         ////console.log(vote + ' ' + currentVotes[vote]);
 
         for (var i = 0; i < activeOptions.length; i++) {
-          if (currentVotes.hasOwnProperty(activeOptions[i]))
+          if (currentVotes.hasOwnProperty(activeOptions[i])){
             totalVotes += currentVotes[activeOptions[i]];
+          }
         }
 
 //        barChart.vote(vote);
@@ -603,6 +759,44 @@
         }
       }
 
+    };
+
+    onslyde.template = onslyde.prototype = {
+
+      // Simple JavaScript Templating
+      // John Resig - http://ejohn.org/ - MIT Licensed
+      simple:function (str, data) {
+        /*jshint -W054 */
+        var cache = {};
+
+        // Figure out if we're getting a template, or if we need to
+        // load the template - and be sure to cache the result.
+        var fn = !/\W/.test(str) ?
+          cache[str] = cache[str] ||
+            onslyde.template.simple(document.getElementById(str).innerHTML) :
+
+          // Generate a reusable function that will serve as a template
+          // generator (and which will be cached).
+          new Function("obj",
+            "var p=[],print=function(){p.push.apply(p,arguments);};" +
+
+              // Introduce the data as local variables using with(){}
+              "with(obj){p.push('" +
+
+              // Convert the template into pure JavaScript
+              str
+                .replace(/[\r\t\n]/g, " ")
+                .split("<%").join("\t")
+                .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                .replace(/\t=(.*?)%>/g, "',$1,'")
+                .split("\t").join("');")
+                .split("%>").join("p.push('")
+                .split("\r").join("\\'") + "');}return p.join('');");
+
+        // Provide some basic currying to the user
+        return data ? fn(data) : fn;
+
+      }
     };
 
 

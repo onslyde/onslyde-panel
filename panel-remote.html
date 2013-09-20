@@ -11,16 +11,16 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
   <meta http-equiv="cache-control" content="no-cache" />
   <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-  <link href="css/panel/panel-remote.css?v=1" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/panel/panel-remote.css?v=100" media="screen" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
 <div id="roulette"></div>
 <div id="browser">
 
-  <h2 id="vote-label">Get Ready!</h2>
   <nav class="primary">
     <ul>
+      <li class="logo-banner"><img src="http://onslyde.com/images/edge/edge-logo-small.png"/></li>
       <li>
         <input id="agree" class="button" type="submit" value="Agree" />
         <input id="disagree" class="button" type="submit" value="Disagree"/>
@@ -29,8 +29,8 @@
 
     </ul>
   </nav>
-  <div class="auth-holder">
-    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+  <div id="auth-holder" class="auth-holder">
+    <span id="authorize-button"><i class="pictogram">&#62223</i> Authorize</span>
     <div id="usercontent"></div>
   </div>
 
@@ -40,12 +40,14 @@
 
       <div id="about-page" class="slide">
         <div id="from-slide">
-          Hi, This is the onslyde remote. Audience members will connect to your session and see this remote. The content/remote will update as you move through the slides.
+          <p>Brought to you by:</p>
+          <div style="width:28%;display:inline-block;max-width:300px">
+            <img src="http://onslyde.com/images/edge/ft-labs.png" style="width:48%;" /> </div>
+          <div style="width:68%;display:inline-block;max-width:500px">
+            <img src="http://onslyde.com/images/edge/google_developers_logo.png" />  </div>
         </div>
         <p>
-
-          <br/>
-          <a href="https://twitter.com/onslyde" target="_blank">Follow @onslyde</a>
+          <a href="https://twitter.com/edgeconf" target="_blank">Follow @edgeconf</a>
         </p>
 
       </div>
@@ -55,20 +57,30 @@
   </div>
 
 </div>
-<script type="text/javascript" src="js/panel/gplus-oauth.js"></script>
-<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-<script type="text/javascript" src="js/panel/panel-remote.js?v=2" ></script>
-<script type="text/javascript" src="js/panel/onslyde-1.0.0.panel.js?v=1" ></script>
+
+
+<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js" ></script>
 <script type="text/javascript">
 
   onslyde({
-    panelRemote: {sessionID: (getParameterByName("session") || 194)}
+    panelRemote: {sessionID: 167}
   });
 
+  function gplusCallBack(){
+    //google api won't take this as callback param for some reason
+    onslyde.oauth.handleClientLoad();
+  }
+
 </script>
-<script type="text/javascript" src="js/panel/gracefulWebSocket.js"></script>
+
+<script type="text/javascript" src="js/panel/dist/onslyde-remote-1.0.0.js" ></script>
+<script src="https://apis.google.com/js/client.js?onload=gplusCallBack"></script>
 
 <script type="text/javascript">
+
+  window.addEventListener('load', function() {
+    FastClick.attach(document.body);
+  }, false);
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-31854873-3']);

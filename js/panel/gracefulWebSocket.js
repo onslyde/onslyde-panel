@@ -1,16 +1,22 @@
-var ws;
-window.addEventListener('load', function (e) {
-  // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-  ws = myws().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
-  ws = onslyde.ws.connect(ws);
-}, false);
+(function (window, document) {
+  "use strict";
 
-function myws() {
+
+
+  window.addEventListener('load', function (e) {
+    // in fallback mode: connect returns a dummy object implementing the WebSocket interface
+    window.ws = onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
+    window.ws = onslyde.ws.connect(ws);
+  }, false);
+
+onslyde.wsFallback = onslyde.prototype = {
+
+ createSocket : function() {
 
   function encodeData(data) {
     var urlEncodedData = "";
 
-    for (name in data) {
+    for (var name in data) {
       urlEncodedData += name + "=" + data[name] + "&";
     }
 
@@ -34,7 +40,7 @@ function myws() {
         fallbackPollInterval:3000, // number of ms between poll requests
         fallbackPollParams:{}    // optional params to pass with poll requests
       };
-      console.log('----', url)
+
       // Override defaults with user properties
       var opts = this.defaults;
 
@@ -44,10 +50,10 @@ function myws() {
       function FallbackSocket() {
 
         // WebSocket interface constants
-        const CONNECTING = 0;
-        const OPEN = 1;
-        const CLOSING = 2;
-        const CLOSED = 3;
+        var CONNECTING = 0;
+        var OPEN = 1;
+        var CLOSING = 2;
+        var CLOSED = 3;
 
         var pollInterval;
         var openTimout;
@@ -60,7 +66,7 @@ function myws() {
           readyState:CONNECTING,
           bufferedAmount:0,
           send:function (senddata) {
-//                        console.log(data);
+
             var success = true;
             //replace colon from namespaced websocket data
 
@@ -82,19 +88,19 @@ function myws() {
               if (vote.split(',').length > 0) {
                 //we know/assume there will be 3 items in the array,
                 //with the vote data being the first
-                console.log(vote.split(',')[0])
+
                 vote = vote.split(',')[0];
               }
 
               if (!window['userObject'] || typeof userObject === 'undefined') {
-                var userObject = {
+                 window.userObject = {
                   name:'unknown',
                   email:'unknown'
-                }
+                };
               }
 
               posturl = opts.fallbackSendURL + '/go/attendees/vote';
-              senddata = {"vote":vote, "sessionID":onslyde.ws.sessionID(), "attendeeIP":attendeeIP, "username":userObject.name, "email":userObject.email};
+              senddata = {"vote":vote, "sessionID":onslyde.ws.sessionID(), "attendeeIP":attendeeIP, "username":window.userObject.name, "email":window.userObject.email};
             }
 
             var ai = new onslyde.core.ajax(posturl, function (text, url) {
@@ -105,8 +111,8 @@ function myws() {
             return success;
           },
           close:function () {
-            clearTimeout(openTimout);
-            clearInterval(pollInterval);
+            window.clearTimeout(openTimout);
+            window.clearInterval(pollInterval);
             this.readyState = CLOSED;
           },
           onopen:function () {
@@ -166,10 +172,10 @@ function myws() {
         }
 
         // simulate open event and start polling
-        openTimout = setTimeout(function () {
+        openTimout = window.setTimeout(function () {
           fws.readyState = OPEN;
           poll('start');
-          pollInterval = setInterval(poll, opts.fallbackPollInterval);
+          pollInterval = window.setInterval(poll, opts.fallbackPollInterval);
         }, opts.fallbackOpenDelay);
 
         // return socket impl
@@ -180,7 +186,6 @@ function myws() {
       var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip()) : new FallbackSocket();
       var senddata = {"sessionID":onslyde.ws.sessionID(), "attendeeIP":onslyde.ws.getip()};
       var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/remove', function (text, url) {
-        console.log('remove', text, url)
       }, false);
       window.addEventListener("beforeunload", function (e) {
         ws.close();
@@ -199,3 +204,6 @@ function myws() {
     }
   };
 }
+
+};
+})(window,document);

@@ -1,41 +1,44 @@
-var speak = document.querySelector('#speak');
-var disagree = document.querySelector('#disagree');
-var agree = document.querySelector('#agree');
-var voteLabel = document.querySelector('#vote-label');
-var voted;
-//todo make this unique user for session management/voter registration
-//var ws = slidfast.ws.join('client:anonymous2');
+var speak = document.querySelector('#speak'),
+  disagree = document.querySelector('#disagree'),
+  agree = document.querySelector('#agree'),
+  voted,
+  isSpeaking = false;
 
-disablePoll();
+
 
 speak.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
   if (userObject.name === '') {
-    speak.onclick = handleAuthClick;
+    speak.onclick = onslyde.oauth.handleAuthClick;
   } else {
     ws.send('speak:' + JSON.stringify(userObject));
-    speak.disabled = true;
-    speak.value = 'You are queued to speak';
+    speak.value = 'Cancel';
   }
-
-
 };
 
 var agreeTimeout,
-  disagreeTimeout;
+  disagreeTimeout,
+  disagreeInterval,
+  agreeInterval;
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
   ws.send('props:disagree,' + userObject.name + "," + userObject.email);
   disagree.disabled = true;
-  disagree.style.opacity = .4;
-  disagree.value = "vote again in 30 seconds";
+  disagree.style.opacity = 0.4;
+
   clearTimeout(disagreeTimeout);
   disagreeTimeout = setTimeout(function () {
     disagree.disabled = false;
     disagree.style.opacity = 1;
     disagree.value = 'Disagree';
-  }, 30000);
+    clearInterval(disagreeInterval);
+  }, 15000);
+  var counter = 15;
+  disagreeInterval = setInterval(function () {
+    disagree.value = 'vote again in ' + counter + ' seconds';
+    counter--;
+  }, 1000);
   return false;
 };
 
@@ -43,66 +46,92 @@ agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
   ws.send('props:agree,' + userObject.name + "," + userObject.email);
   agree.disabled = true;
-  agree.style.opacity = .4;
-  agree.value = "vote again in 30 seconds";
+  agree.style.opacity = 0.4;
+//  agree.value = "vote again in 15 seconds";
   clearTimeout(agreeTimeout);
   agreeTimeout = setTimeout(function () {
     agree.disabled = false;
     agree.style.opacity = 1;
     agree.value = 'Agree';
-  }, 30000);
+    clearInterval(agreeInterval);
+  }, 15000);
+  var counter = 15;
+  agreeInterval = setInterval(function () {
+    agree.value = 'vote again in ' + counter + ' seconds';
+    counter--;
+  }, 1000);
   return false;
 };
 
 function disablePoll() {
   disagree.disabled = true;
   disagree.disabled = true;
-  agree.style.opacity = .4;
-  agree.style.opacity = .4;
+  agree.style.opacity = 0.4;
+  agree.style.opacity = 0.4;
 
   speak.disabled = true;
-  speak.style.opacity = .4;
-  voteLabel.innerHTML = 'Waiting...';
+  speak.style.opacity = 0.4;
+//  voteLabel.innerHTML = 'Waiting...';
 }
 
+disablePoll();
+
 function enablePoll() {
-  speak.disabled = false;
-  disagree.disabled = false;
+
+  if (!isSpeaking) {
+    speak.disabled = false;
+    speak.value = 'I want to speak';
+    speak.style.opacity = 1;
+  }
+  clearTimeout(agreeTimeout);
+  clearInterval(agreeInterval);
   agree.disabled = false;
-  disagree.value = 'Disagree';
-  agree.value = 'Agree';
-  speak.style.opacity = 1;
-  disagree.style.opacity = 1;
   agree.style.opacity = 1;
-  voteLabel.innerHTML = 'Vote!';
+  agree.value = 'Agree';
+//  }
+
+  clearTimeout(disagreeTimeout);
+  clearInterval(disagreeInterval);
+  disagree.disabled = false;
+  disagree.value = 'Disagree';
+  disagree.style.opacity = 1;
+//  }
+
+
+//  voteLabel.innerHTML = 'Vote!';
   voted = false;
 }
 
 window.addEventListener('updateOptions', function (e) {
-  console.log('---updateOptions')
   enablePoll();
 }, false);
 
-//callback for pressing the speak button (managed server side)
-window.addEventListener('speak', function (e) {
-  handleSpeakEvent(e);
-}, false);
+
 
 var resetTimeout;
 
 function handleSpeakEvent(e) {
-
-  console.log('resetTimeout', resetTimeout, e)
-  if (e.position === '777' && (typeof resetTimeout === 'undefined')) {
-    speak.value = 'Thanks for speaking!';
+  if (e.position === '777') {
+    isSpeaking = true;
+    speak.value = 'You\'re speaking!';
+    speak.disabled = true;
+    speak.style.opacity = 0.4;
     resetTimeout = setTimeout(function () {
+      isSpeaking = false;
+      speak.style.opacity = 1;
       speak.value = 'I want to speak';
       speak.disabled = false;
+      clearTimeout(resetTimeout);
     }, 20000);
   } else {
 
   }
 }
+
+//callback for pressing the speak button (managed server side)
+window.addEventListener('speak', function (e) {
+  handleSpeakEvent(e);
+}, false);
 
 window.addEventListener('remoteMarkup', function (e) {
 //  console.log('e', typeof e.markup);
@@ -111,7 +140,8 @@ window.addEventListener('remoteMarkup', function (e) {
     var markup = JSON.parse(e.markup);
     try {
       document.getElementById('from-slide').innerHTML = decodeURIComponent(markup.remoteMarkup);
-    } catch (e) {
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -154,6 +184,6 @@ window.addEventListener('roulette', function (e) {
 }, false);
 
 function getParameterByName(name) {
-  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }

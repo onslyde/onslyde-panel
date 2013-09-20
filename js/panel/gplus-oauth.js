@@ -1,68 +1,66 @@
-var clientId = '849957059352.apps.googleusercontent.com';
-var apiKey = 'AIzaSyAr0JthSfMJAIEjs-ufDrsq5cVpakFivSc';
+(function (window, document) {
+  "use strict";
 
-// To enter one or more authentication scopes, refer to the documentation for the API.
-var scopes = ['https://www.googleapis.com/auth/plus.me','https://www.googleapis.com/auth/userinfo.email'];
+var clientId = '849957059352.apps.googleusercontent.com',
+    apiKey = 'AIzaSyAr0JthSfMJAIEjs-ufDrsq5cVpakFivSc',
+    scopes = ['https://www.googleapis.com/auth/plus.me','https://www.googleapis.com/auth/userinfo.email'];
 
-// Use a button to handle authentication the first time.
-function handleClientLoad() {
-  gapi.client.setApiKey(apiKey);
-  window.setTimeout(checkAuth,1);
-}
+  var userObject = window.userObject = {name:'',email:'',org:'',pic:''};
 
-function checkAuth() {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
-}
+onslyde.oauth = onslyde.prototype = {
 
-
-function handleAuthResult(authResult) {
-  var authorizeButton = document.getElementById('authorize-button');
-  var speakButton = document.getElementById('speak');
-
-  if (authResult && !authResult.error) {
-    authorizeButton.style.visibility = 'hidden';
-    speakButton.onclick = function(event) {
-      _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-      ws.send('speak:' + JSON.stringify(userObject));
-      speak.disabled = true;
-      speak.value = 'You are queued to speak';
-    };
-    makeApiCall();
-  } else {
-    authorizeButton.style.visibility = '';
-    authorizeButton.onclick = handleAuthClick;
-  }
-}
-
-function handleAuthClick(event) {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+  handleAuthClick : function (event) {
+  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, onslyde.oauth.handleAuthResult);
   return false;
-}
+  },
 
-var userObject = {name:'',email:'',org:'',pic:''};
+  handleAuthResult : function (authResult) {
+    var authorizeButton = document.getElementById('authorize-button');
+    var speakButton = document.getElementById('speak');
 
-function makeApiCall() {
-//  console.log(gapi.auth.getToken())
-  gapi.client.load('plus', 'v1', function() {
-    var request = gapi.client.plus.people.get({
-      'userId': 'me'
+    if (authResult && !authResult.error) {
+      authorizeButton.style.visibility = 'hidden';
+      speakButton.onclick = function(event) {
+
+        _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
+        ws.send('speak:' + JSON.stringify(userObject));
+        speak.disabled = true;
+        speak.value = 'You are queued to speak';
+      };
+      onslyde.oauth.makeApiCall();
+    } else {
+      authorizeButton.style.visibility = '';
+      authorizeButton.onclick = onslyde.oauth.handleAuthClick;
+    }
+  },
+
+  checkAuth : function () {
+    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, onslyde.oauth.handleAuthResult);
+  },
+
+  handleClientLoad : function () {
+    gapi.client.setApiKey(apiKey);
+    window.setTimeout(onslyde.oauth.checkAuth,1);
+  },
+
+  makeApiCall : function () {
+  //  console.log(gapi.auth.getToken())
+    gapi.client.load('plus', 'v1', function() {
+      var request = gapi.client.plus.people.get({
+        'userId': 'me'
+      });
+      request.execute(function(resp) {
+        userObject.name = resp.displayName;
+        userObject.pic = resp.image.url;
+        document.querySelector('#speak').value = 'I want to speak';
+      });
     });
-    request.execute(function(resp) {
-//      var heading = document.createElement('h4');
-//      var image = document.createElement('img');
-//      image.src = resp.image.url;
-//      heading.appendChild(image);
-//      heading.appendChild(document.createTextNode(resp.displayName));
-      userObject.name = resp.displayName;
-      userObject.pic = resp.image.url;
-      document.querySelector('#speak').value = 'I want to speak';
-//      document.getElementById('usercontent').appendChild(heading);
+    gapi.client.load('oauth2', 'v2', function() {
+      var request = gapi.client.oauth2.userinfo.get();
+      request.execute(function(resp2){
+        userObject.email = resp2.email;
+      });
     });
-  });
-  gapi.client.load('oauth2', 'v2', function() {
-    var request = gapi.client.oauth2.userinfo.get();
-    request.execute(function(resp2){
-      userObject.email = resp2.email;
-    });
-  });
-}
+  }
+};
+})(window,document);
