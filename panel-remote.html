@@ -62,8 +62,13 @@
 <script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js" ></script>
 <script type="text/javascript">
 
+  function getParameterByName(name) {
+    var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }
+
   onslyde({
-    panelRemote: {sessionID: 167}
+    panelRemote: {sessionID: getParameterByName('session')}
   });
 
   function gplusCallBack(){
