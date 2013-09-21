@@ -446,26 +446,26 @@
 
         //do speaker lookup (if local JSON is provided)
         //todo - move this out to plugin
-//        try{
-//        var attendeesLookup = getAttendees();
-//        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
-//          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
-//            var attendee = attendeesLookup[i];
-//            var fullName = attendee.FirstName + ' ' + attendee.Surname;
-//            if(speaker.name === fullName){
-//              speaker.org = attendee.Company;
-//              break;
-//            }else if(speaker.email === attendee.Email){
-//              speaker.org = attendee.Company;
-//              break;
-//            }else{
-//              speaker.org = '';
-//            }
-//          }
-//        }
-//        }catch(e){
-//          console.log('fix this');
-//        }
+        try{
+        var attendeesLookup = getAttendees();
+        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
+          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
+            var attendee = attendeesLookup[i];
+            var fullName = attendee.FirstName + ' ' + attendee.Surname;
+            if(speaker.name === fullName){
+              speaker.org = attendee.Company;
+              break;
+            }else if(speaker.email === attendee.Email){
+              speaker.org = attendee.Company;
+              break;
+            }else{
+              speaker.org = '';
+            }
+          }
+        }
+        }catch(e){
+          console.log('fix this');
+        }
 
         fragment.querySelector('.org').innerHTML = speaker.org;
         return fragment;
