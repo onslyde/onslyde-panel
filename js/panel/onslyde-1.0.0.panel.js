@@ -478,7 +478,11 @@
         if(!internal){
           //this is for the cancel option on remotes. If they're already in the queue then that means they hit cancel.
           for (var i = 0, len = speakerList.length; i < len; i++) {
-            speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+            if(speakerList[i].speaker.email === speaker.email){
+              speakerIsQueued = true;
+              break;
+            }
+
           }
           if(!speakerIsQueued){
             //need to push onto array after we do the check for existing

@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2013-09-20
+/*! onslyde - v0.0.1 - 2013-09-21
 * Copyright (c) 2013 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";
@@ -427,26 +427,26 @@
 
         //do speaker lookup (if local JSON is provided)
         //todo - move this out to plugin
-//        try{
-//        var attendeesLookup = getAttendees();
-//        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
-//          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
-//            var attendee = attendeesLookup[i];
-//            var fullName = attendee.FirstName + ' ' + attendee.Surname;
-//            if(speaker.name === fullName){
-//              speaker.org = attendee.Company;
-//              break;
-//            }else if(speaker.email === attendee.Email){
-//              speaker.org = attendee.Company;
-//              break;
-//            }else{
-//              speaker.org = '';
-//            }
-//          }
-//        }
-//        }catch(e){
-//          console.log('fix this');
-//        }
+        try{
+        var attendeesLookup = getAttendees();
+        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
+          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
+            var attendee = attendeesLookup[i];
+            var fullName = attendee.FirstName + ' ' + attendee.Surname;
+            if(speaker.name === fullName){
+              speaker.org = attendee.Company;
+              break;
+            }else if(speaker.email === attendee.Email){
+              speaker.org = attendee.Company;
+              break;
+            }else{
+              speaker.org = '';
+            }
+          }
+        }
+        }catch(e){
+          console.log('fix this');
+        }
 
         fragment.querySelector('.org').innerHTML = speaker.org;
         return fragment;
@@ -459,7 +459,11 @@
         if(!internal){
           //this is for the cancel option on remotes. If they're already in the queue then that means they hit cancel.
           for (var i = 0, len = speakerList.length; i < len; i++) {
-            speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+            if(speakerList[i].speaker.email === speaker.email){
+              speakerIsQueued = true;
+              break;
+            }
+
           }
           if(!speakerIsQueued){
             //need to push onto array after we do the check for existing
