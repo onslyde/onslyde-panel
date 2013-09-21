@@ -446,41 +446,49 @@
 
         //do speaker lookup (if local JSON is provided)
         //todo - move this out to plugin
-        try{
-        var attendeesLookup = getAttendees();
-        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
-          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
-            var attendee = attendeesLookup[i];
-            var fullName = attendee.FirstName + ' ' + attendee.Surname;
-            if(speaker.name === fullName){
-              speaker.org = attendee.Company;
-              break;
-            }else if(speaker.email === attendee.Email){
-              speaker.org = attendee.Company;
-              break;
-            }else{
-              speaker.org = '';
-            }
-          }
-        }
-        }catch(e){
-          console.log('fix this');
-        }
+//        try{
+//        var attendeesLookup = getAttendees();
+//        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
+//          for (var i = 0, len = attendeesLookup.length; i < len; i++) {
+//            var attendee = attendeesLookup[i];
+//            var fullName = attendee.FirstName + ' ' + attendee.Surname;
+//            if(speaker.name === fullName){
+//              speaker.org = attendee.Company;
+//              break;
+//            }else if(speaker.email === attendee.Email){
+//              speaker.org = attendee.Company;
+//              break;
+//            }else{
+//              speaker.org = '';
+//            }
+//          }
+//        }
+//        }catch(e){
+//          console.log('fix this');
+//        }
 
         fragment.querySelector('.org').innerHTML = speaker.org;
         return fragment;
       },
 
-      queueSpeaker:function (speaker, ip) {
+      queueSpeaker:function (speaker, ip, internal) {
         var speakerIsQueued = false;
-        for (var i = 0, len = speakerList.length; i < len; i++) {
-          speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+
+        //internal var handles the case of rebuilding the queue internally (i.e. through selecting a speaker for live)
+        if(!internal){
+          //this is for the cancel option on remotes. If they're already in the queue then that means they hit cancel.
+          for (var i = 0, len = speakerList.length; i < len; i++) {
+            speakerIsQueued = (speakerList[i].speaker.email === speaker.email);
+          }
+          if(!speakerIsQueued){
+            //need to push onto array after we do the check for existing
+            speakerList.push({'speaker':speaker, 'ip':ip});
+          }
         }
         //if speaker is already queued remove them
         if (speakerIsQueued) {
           onslyde.panel.removeSpeakerFromList(speaker.email);
         } else {
-          speakerList.push({'speaker':speaker, 'ip':ip});
           //passing in speaker data along with necessary onclick function for moderators
           document.getElementById('speakerQueue').appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.speakerLive));
         }
@@ -547,9 +555,10 @@
           //        console.log('speakerList after remove',speakerList);
           //todo - rebuild list - improve this
           document.getElementById('speakerQueue').innerHTML = '';
-
-          for (var j = 0; j < speakerList.length; j++) {
-            onslyde.panel.queueSpeaker(speakerList[j].speaker, speakerList[j].ip);
+          //rebuild the list
+          var currentListSize =  speakerList.length;
+          for (var j = 0; j < currentListSize; j++) {
+            onslyde.panel.queueSpeaker(speakerList[j].speaker, speakerList[j].ip, true);
           }
         }
 
