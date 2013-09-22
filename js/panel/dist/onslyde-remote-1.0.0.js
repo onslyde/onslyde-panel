@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2013-09-21
+/*! onslyde - v0.0.1 - 2013-09-22
 * Copyright (c) 2013 Wesley Hales; Licensed  */
 var speak = document.querySelector('#speak'),
   disagree = document.querySelector('#disagree'),
@@ -10,7 +10,7 @@ var speak = document.querySelector('#speak'),
 
 speak.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-  if (userObject.name === '') {
+  if (window.userObject.name === '') {
     speak.onclick = onslyde.oauth.handleAuthClick;
   } else {
     ws.send('speak:' + JSON.stringify(userObject));
@@ -25,7 +25,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  ws.send('props:disagree,' + userObject.name + "," + userObject.email);
+  ws.send('props:disagree,' + window.userObject.name + "," + window.userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -46,7 +46,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  ws.send('props:agree,' + userObject.name + "," + userObject.email);
+  ws.send('props:agree,' + window.userObject.name + "," + window.userObject.email);
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";
@@ -196,7 +196,7 @@ function getParameterByName(name) {
     apiKey = 'AIzaSyAr0JthSfMJAIEjs-ufDrsq5cVpakFivSc',
     scopes = ['https://www.googleapis.com/auth/plus.me','https://www.googleapis.com/auth/userinfo.email'];
 
-  var userObject = window.userObject = {name:'',email:'',org:'',pic:''};
+  window.userObject = {name:'',email:'',org:'',pic:''};
 
   onslyde.oauth = onslyde.prototype = {
 
@@ -214,7 +214,7 @@ function getParameterByName(name) {
         authHolder.style.display = 'none';
         speakButton.onclick = function(event) {
           _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-          ws.send('speak:' + JSON.stringify(userObject));
+          ws.send('speak:' + JSON.stringify(window.userObject));
           if(speak.value === 'Cancel'){
             speak.value = 'I want to speak';
           }else{
@@ -244,15 +244,15 @@ function getParameterByName(name) {
           'userId': 'me'
         });
         request.execute(function(resp) {
-          userObject.name = resp.displayName;
-          userObject.pic = resp.image.url;
+          window.userObject.name = resp.displayName;
+          window.userObject.pic = resp.image.url;
           document.querySelector('#speak').value = 'I want to speak';
         });
       });
       gapi.client.load('oauth2', 'v2', function() {
         var request = gapi.client.oauth2.userinfo.get();
         request.execute(function(resp2){
-          userObject.email = resp2.email;
+          window.userObject.email = resp2.email;
         });
       });
     }

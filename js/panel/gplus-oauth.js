@@ -5,7 +5,7 @@
     apiKey = 'AIzaSyAr0JthSfMJAIEjs-ufDrsq5cVpakFivSc',
     scopes = ['https://www.googleapis.com/auth/plus.me','https://www.googleapis.com/auth/userinfo.email'];
 
-  var userObject = window.userObject = {name:'',email:'',org:'',pic:''};
+  window.userObject = {name:'',email:'',org:'',pic:''};
 
   onslyde.oauth = onslyde.prototype = {
 
@@ -23,7 +23,7 @@
         authHolder.style.display = 'none';
         speakButton.onclick = function(event) {
           _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-          ws.send('speak:' + JSON.stringify(userObject));
+          ws.send('speak:' + JSON.stringify(window.userObject));
           if(speak.value === 'Cancel'){
             speak.value = 'I want to speak';
           }else{
@@ -53,15 +53,15 @@
           'userId': 'me'
         });
         request.execute(function(resp) {
-          userObject.name = resp.displayName;
-          userObject.pic = resp.image.url;
+          window.userObject.name = resp.displayName;
+          window.userObject.pic = resp.image.url;
           document.querySelector('#speak').value = 'I want to speak';
         });
       });
       gapi.client.load('oauth2', 'v2', function() {
         var request = gapi.client.oauth2.userinfo.get();
         request.execute(function(resp2){
-          userObject.email = resp2.email;
+          window.userObject.email = resp2.email;
         });
       });
     }
