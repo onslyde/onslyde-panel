@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Onslyde Panel</title>
+
+  <meta name="description" content="onslyde example">
+  <meta name="author" content="Wesley Hales">
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/panel/google-panel.css">
+</head>
+<body>
+
+<section id="panel-container">
+  <header class="primary-header">
+    <div class="connect-url" onclick="onslyde.panel.toggleConnectInfo()">
+      <i class="pictogram">&#128241;</i> onslyde.com/go/<span id="sessionID"></span>
+    </div>
+    <div class="session-time light">
+      <span><span class="bold" id="timer"></span> session time</span>
+    </div>
+    <div class="total-attendees light">
+      <span><span class="bold" id="totalCount">0</span> connected delegates </span>
+    </div>
+  </header>
+
+  <header class="secondary-header bold">
+    Chrome leadership Q&amp;A panel
+  </header>
+
+  <div class="content">
+
+    <section class="left-col">
+
+      <div class="speaking-now">
+        <div class="speaking-now-title light">Speaking now:</div>
+        <div id="currentSpeaker" class="bold">Discussion</div>
+      </div>
+
+      <div class="panel">
+
+        <h3>Panel</h3>
+
+        <ul id="panelists" class="panel-list">
+
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="right-col">
+
+      <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
+        <div class="sentiment-bar1">
+
+          <div id="sentiment-chart-disagree" class="transition"><span id="disagreeCount">0</span></div>
+        </div>
+        <div class="sentiment-bar2">
+
+          <div id="sentiment-chart-agree" class="transition"><span id="agreeCount">0</span></div>
+        </div>
+      </div>
+
+      <h3 class="queue-title" onclick="onslyde.panel.clearQueue()">Delegates Queued to Speak (<span id="queuedSpeakers">0</span>)</h3>
+      <div class="speaker-queue-container">
+
+        <section class="speaker-list" id="speakerQueue">
+
+        </section>
+      </div>
+    </section>
+
+  </div>
+
+  <div style="display:none">
+    <div id="speaker-template">
+      <img src="" alt="" />
+      <ul class="speaker-details">
+        <li class="name"></li>
+        <li class="org"></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="modal" onclick="onslyde.panel.toggleConnectInfo()">
+  <div id="modal-connect-string"></div>
+  <div id="qr"></div>
+</section>
+
+<script type="text/html" id="panelist_template">
+  <%
+  var panelists = getPanelists();
+  for ( var i = 0; i < panelists.length; i++ ) {
+  %>
+  <li class="<%= panelists[i].mod === true ? 'moderator' : ''%>">
+    <img src="<%=panelists[i].pic%>" alt="<%=panelists[i].name%>" />
+    <ul class="panelist-details">
+      <li class="name"><%=panelists[i].name%></li>
+      <li class="org"><%=panelists[i].org%></li>
+      <li class="<%= panelists[i].mod === true ? 'mod' : 'hide'%>">Moderator</li>
+    </ul>
+  </li>
+  <% } %>
+</script>
+
+<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js" ></script>
+<script type="text/javascript">
+
+  onslyde({
+    panel: {sessionID: 167, mode:'default'}
+  });
+</script>
+
+<script>
+
+
+
+  function getPanelists(sessionID){
+    return [
+      {name:'Jake Archibald',org:'Developer Relations',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xjakearchibald.jpg.pagespeed.ic.XwLN6V6C2L.webp',twitter:'jaffathecake',mod:true},
+      {name:'Linus Upson',org:'VP, Chrome',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xlinusupson.jpg.pagespeed.ic.IY9elJ7bmn.webp',twitter:''},
+      {name:'Hiroshi Lockhelmer',org:'VP, Android',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xhiroshilockheimer.jpg.pagespeed.ic.Y1mY5dXTIU.webp',twitter:''},
+      {name:'Arnaud Weber',org:'Chrome desktop and mobile',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xarnaudweber.jpg.pagespeed.ic.qJOm_2_Tcp.webp',twitter:''},
+      {name:'Darin Fisher',org:'Web Platform',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xdarinfisher.jpg.pagespeed.ic.Xd4YU1Lujd.webp',twitter:''},
+      {name:'Erik Kay',org:'Chrome Apps and PNaCL',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xerikkay.jpg.pagespeed.ic.oFjiqjh4Rq.webp',twitter:''},
+      {name:'Ian Ellison-Taylor',org:'Web Platform',pic:'http://1-ps.googleusercontent.com/x/s.chromedevsummit-site.appspot.com/developer.chrome.com/devsummit/images/headshots/xianellisontaylor.jpg.pagespeed.ic.3Hwq-AfiSg.webp',twitter:''},
+    ]
+  }
+
+
+  document.getElementById('panelists').innerHTML = onslyde.template.simple('panelist_template',getPanelists());
+
+  var panelistNodes = document.querySelectorAll('#panelists > li');
+
+  var onclickHelper = function (e,a) {
+    return function (f) {
+      onslyde.panel.speakerLive(e,'111.111.111.11' + a)
+    };
+  };
+  for(var i=0;i<panelistNodes.length;i++){
+    panelistNodes[i].onclick = onclickHelper(getPanelists()[i],i);
+  };
+
+</script>
+
+<script src="http://onslyde.com/js/qrcode.js"></script>
+<script>
+  qrInterval = setInterval(function(){
+    if(document.getElementById('sessionID').innerHTML != ''){
+      document.getElementById('qr').innerHTML = create_qrcode('http://onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+      clearInterval(qrInterval)
+    }
+  },1000)
+
+</script>
+
+</body>
+</html>
