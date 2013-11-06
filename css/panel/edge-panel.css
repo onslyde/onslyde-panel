@@ -19,11 +19,12 @@ body {
 i.pictogram {
   font-family: "entypo";
   display: inline-block;
-  margin: 0 5px 0 0;
   font-size: 2.5em;
-  line-height: 0.3;
+  line-height: .6;
+  overflow: hidden;
+  vertical-align: middle;
   font-style: normal;
-  font-weight: lighter;
+  font-weight: 100;
   -webkit-font-smoothing: antialiased;
 }
 
