@@ -245,6 +245,7 @@ nav.primary > ul li a {
   text-transform: uppercase;
   -webkit-appearance: none;
   border-radius: 0;
+  cursor: pointer;
 }
 
 #speak {
