@@ -1,5 +1,5 @@
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   color: #fff;
   margin: 0;
   padding: 0;
@@ -15,8 +15,12 @@ a {
   color: #343434;
 }
 
+b {
+  font-weight: 200;
+}
+
 h2#vote-label {
-  font-family: 'Lato-Light', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
   color: #fff;
   text-align: center;
@@ -65,12 +69,12 @@ Mobile Device Page Setup
 
 #browser::after {
   content: "";
-  background: url(../../images/chrome.png) no-repeat 87% 150%;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  opacity: .4;
+  /*background: url(http://db.tt/Bjow1L0I) no-repeat 0 0;*/
+  /*-webkit-background-size: cover;*/
+  /*-moz-background-size: cover;*/
+  /*-o-background-size: cover;*/
+  /*background-size: cover;*/
+  opacity: 1;
   top: 0;
   left: 0;
   bottom: 0;
@@ -127,9 +131,9 @@ Mobile Device Page Setup
   left: 0;
   right: 0;
   width: auto;
-  -moz-box-shadow: 0 0 27px -3px #777;
-  -webkit-box-shadow: 0 0 27px -3px #777;
-  box-shadow: 0 0 27px -3px #777;
+  /*-moz-box-shadow: 0 0 27px -3px #777;*/
+  /*-webkit-box-shadow: 0 0 27px -3px #777;*/
+  /*box-shadow: 0 0 27px -3px #777;*/
 }
 
 /*************************************************
@@ -228,16 +232,16 @@ nav.primary > ul li a {
 #disagree,
 #agree,
 #speak {
-  font-family: 'Lato-Bold', sans-serif;
-  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  color: #575757;
   padding: 20px 0;
   width: 100%;
   font-size: 1.3rem;
-  font-weight: 700;
+  /*font-weight: 700;*/
   border: 0;
   border-bottom: 1px solid #fff;
   margin: 0;
-  background-color: #252525;
+  background-color: #f0f0f0;
   text-transform: uppercase;
   -webkit-appearance: none;
   border-radius: 0;
@@ -254,15 +258,15 @@ nav.primary > ul li a {
 }
 
 #authorize-button {
-  font-family: 'Lato-Light', sans-serif;
-  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  color: #000;
   padding: 3px 5px;
   width: auto;
   font-size: 1rem;
   border: 0;
   border-radius: 3px;
   margin: 5px auto 0 auto;
-  background-color: #252525;
+  /*background-color: #252525;*/
   text-transform: uppercase;
 }
 
@@ -296,15 +300,17 @@ nav.primary > ul li a {
 }
 
 nav.primary li.logo-banner {
-  background: #6aa5db;
-  background: -moz-linear-gradient(top,#6aa5db 0,#3983c7 100%);
-  background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#6aa5db),color-stop(100%,#3983c7));
-  background: -webkit-linear-gradient(top,#6aa5db 0,#3983c7 100%);
-  background: -o-linear-gradient(top,#6aa5db 0,#3983c7 100%);
-  background: -ms-linear-gradient(top,#6aa5db 0,#3983c7 100%);
-  background: linear-gradient(to bottom,#6aa5db 0,#3983c7 100%);
+  background: url(../../images/chrome.png) no-repeat 50%, #fff;
+  background-size: 50px;
+  /*background: -moz-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
+  /*background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#6aa5db),color-stop(100%,#3983c7));*/
+  /*background: -webkit-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
+  /*background: -o-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
+  /*background: -ms-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
+  /*background: linear-gradient(to bottom,#6aa5db 0,#3983c7 100%);*/
   text-align: center;
   padding: 6px 0 6px 0;
+  height: 50px;
 }
 
 .tweet-button {
@@ -314,15 +320,18 @@ nav.primary li.logo-banner {
   -webkit-box-shadow: 3px 3px 0px -1px #ccc;
   box-shadow: 3px 3px 0px -1px #ccc;
   padding: 10px 9px;
+  margin: 0 10px 0 0;
   display: inline-block;
 }
 
 .currently-speaking {
   display: inline-block;
-  font-weight: 300;
+  font-weight: 600;
 }
 
 .speaker-name {
   display: block;
   margin: 5px;
+  color: #575757;
+  font-size: 1.5em;
 }

@@ -233,6 +233,7 @@ h2, h3 {
   margin: 29px 0 0 0;
   font-size: 1.3rem;
   color: #777;
+  font-weight: 600;
 }
 
 .speaker-queue-container {
@@ -314,12 +315,13 @@ h2, h3 {
 }
 
 .sentiment-bar2 #sentiment-chart-agree {
-  background: -moz-linear-gradient(top,#4db849 0,#368a41 100%);
-  background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#4db849),color-stop(100%,#368a41));
-  background: -webkit-linear-gradient(top,#4db849 0,#368a41 100%);
-  background: -o-linear-gradient(top,#4db849 0,#368a41 100%);
-  background: -ms-linear-gradient(top,#4db849 0,#368a41 100%);
-  background: linear-gradient(to bottom,#4db849 0,#368a41 100%);
+  background: #6aa5db;
+  background: -moz-linear-gradient(top,#6aa5db 0,#3983c7 100%);
+  background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#6aa5db),color-stop(100%,#3983c7));
+  background: -webkit-linear-gradient(top,#6aa5db 0,#3983c7 100%);
+  background: -o-linear-gradient(top,#6aa5db 0,#3983c7 100%);
+  background: -ms-linear-gradient(top,#6aa5db 0,#3983c7 100%);
+  background: linear-gradient(to bottom,#6aa5db 0,#3983c7 100%);
   height: 120px;
   float: left;
   position: relative;
