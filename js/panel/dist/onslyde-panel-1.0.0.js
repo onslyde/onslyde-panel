@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2013-09-22
+/*! onslyde - v0.0.1 - 2013-11-18
 * Copyright (c) 2013 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";
@@ -514,10 +514,12 @@
         onslyde.panel.resetAllVotes();
 
         var twitterHandle = (speaker.twitter ? '@' + speaker.twitter : speaker.name);
+        var gplusHandle = (speaker.gplus ? '+' + speaker.gplus : speaker.name);
         onslyde.panel.connect(activeOptionsString);
         onslyde.panel.sendMarkup('' +
           '<span class="currently-speaking">Currently Speaking:</span><span class="speaker-name">' + speaker.name + '</span>' +
-          '<span class="tweet-button"><a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to ' + twitterHandle + ' talk about... at #edgeconf') + '" target="_blank"><i class="pictogram">&#62217;</i>Tweet what ' + speaker.name.split(' ')[0] + ' just said</a></span>' +
+          '<span class="tweet-button"><a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to ' + twitterHandle + ' talk about...') + '" target="_blank"><i class="pictogram">&#62217;</i></a></span>' +
+          '<span class="tweet-button"><a href="https://plus.google.com/' + gplusHandle + '" target="_blank"><i class="pictogram">&#62223;</i></a></span>' +
           '');
 
 

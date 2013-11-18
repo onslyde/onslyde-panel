@@ -36,6 +36,13 @@ module.exports = function(grunt) {
         }
       }
     },
+    watch: {
+      files: [
+        'js/panel/*.js',
+        '!js/panel/fastclick.min.js',
+        '!js/panel/dist/*.js'],
+      tasks: ['default']
+    },
     jshint: {
       options: {
         curly: true,
@@ -69,7 +76,8 @@ module.exports = function(grunt) {
           location: true,
           console: true,
           navigator: true,
-          getAttendees: true
+          getAttendees: true,
+          alert: true
         }
       },
       gruntfile: {
@@ -92,6 +100,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
 
   // Default task.
+  grunt.registerTask('dev', ['watch']);
   grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
 
 };

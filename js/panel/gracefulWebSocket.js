@@ -183,10 +183,27 @@ onslyde.wsFallback = onslyde.prototype = {
       }
 
       // create a new websocket or fallback
-      var ws = ("WebSocket" in window && WebSocket.CLOSED > 2) ? new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip()) : new FallbackSocket();
+      var ws;
+      if("WebSocket" in window && WebSocket.CLOSED > 2){
+        ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
+        //only leverage the pageshow event for pure ws connections
+        window.addEventListener("pageshow", function(){
+          console.log(ws);
+          if(!ws){
+            //reconnect
+            ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
+          }
+        }, false);
+
+      }else{
+        ws = new FallbackSocket();
+      }
+
       var senddata = {"sessionID":onslyde.ws.sessionID(), "attendeeIP":onslyde.ws.getip()};
-      var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/remove', function (text, url) {
-      }, false);
+
+      //create the ajax object for use when client disconnects
+      var ai = new onslyde.core.ajax(opts.fallbackPollURL + '/go/attendees/remove', function (text, url) {}, false);
+
       window.addEventListener("beforeunload", function (e) {
         ws.close();
         ws = null;
@@ -196,7 +213,6 @@ onslyde.wsFallback = onslyde.prototype = {
           ai.doPost(encodeData(senddata));
         }
         (e || window.event).returnValue = confirmationMessage;  //Webkit, Safari, Chrome etc.
-
         return confirmationMessage;
       });
 
