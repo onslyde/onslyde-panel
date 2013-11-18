@@ -188,9 +188,6 @@
 
         ws.onopen = function () {
           isopen = true;
-//           console.log('onopen',initString,typeof initString !== 'undefined')
-          onslyde.ws._send('user:' + username);
-
           if (typeof initString !== 'undefined') {
             onslyde.ws._send(initString);
           }
@@ -225,7 +222,6 @@
       },
 
       _onclose: function (m) {
-        onslyde.ws._send('::disconnect::');
         ws = null;
       },
 
@@ -234,9 +230,12 @@
       },
 
       _send: function (message) {
-        //console.log('sent ');
-        ws.send(message);
-
+        if(!ws || (ws && ws.readyState === 3)){
+          console.log('connection closed... attempting reconnect');
+          this.connect(null,message,sessionID);
+        }else{
+          ws.send(message);
+        }
       }
     };
 

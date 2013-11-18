@@ -13,7 +13,7 @@ speak.onclick = function (event) {
   if (window.userObject.name === '') {
     speak.onclick = onslyde.oauth.handleAuthClick;
   } else {
-    ws.send('speak:' + JSON.stringify(userObject));
+    onslyde.ws._send('speak:' + JSON.stringify(userObject));
     speak.value = 'Cancel';
   }
 };
@@ -25,7 +25,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  ws.send('props:disagree,' + window.userObject.name + "," + window.userObject.email);
+  onslyde.ws._send('props:disagree,' + window.userObject.name + "," + window.userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -46,7 +46,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  ws.send('props:agree,' + window.userObject.name + "," + window.userObject.email);
+  onslyde.ws._send('props:agree,' + window.userObject.name + "," + window.userObject.email);
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";
@@ -216,7 +216,7 @@ function getParameterByName(name) {
         authHolder.style.display = 'none';
         speakButton.onclick = function(event) {
           _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-          ws.send('speak:' + JSON.stringify(window.userObject));
+          onslyde.ws._send('speak:' + JSON.stringify(window.userObject));
           if(speak.value === 'Cancel'){
             speak.value = 'I want to speak';
           }else{
@@ -267,8 +267,7 @@ function getParameterByName(name) {
 
   window.addEventListener('load', function (e) {
     // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-    window.ws = onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
-    window.ws = onslyde.ws.connect(ws);
+    onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   }, false);
 
 onslyde.wsFallback = onslyde.prototype = {
@@ -446,17 +445,9 @@ onslyde.wsFallback = onslyde.prototype = {
 
       // create a new websocket or fallback
       var ws;
-      if("WebSocket" in window && WebSocket.CLOSED > 2){
-        ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
-        //only leverage the pageshow event for pure ws connections
-        window.addEventListener("pageshow", function(){
-          console.log(ws);
-          if(!ws){
-            //reconnect
-            ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
-          }
-        }, false);
 
+      if("WebSocket" in window && WebSocket.CLOSED > 2){
+        ws = onslyde.ws.connect(null,'',onslyde.ws.sessionID());
       }else{
         ws = new FallbackSocket();
       }

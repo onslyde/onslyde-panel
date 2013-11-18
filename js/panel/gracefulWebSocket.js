@@ -5,8 +5,7 @@
 
   window.addEventListener('load', function (e) {
     // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-    window.ws = onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
-    window.ws = onslyde.ws.connect(ws);
+    onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   }, false);
 
 onslyde.wsFallback = onslyde.prototype = {
@@ -184,17 +183,9 @@ onslyde.wsFallback = onslyde.prototype = {
 
       // create a new websocket or fallback
       var ws;
-      if("WebSocket" in window && WebSocket.CLOSED > 2){
-        ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
-        //only leverage the pageshow event for pure ws connections
-        window.addEventListener("pageshow", function(){
-          console.log(ws);
-          if(!ws){
-            //reconnect
-            ws = new WebSocket(url + '?session=' + onslyde.ws.sessionID() + '&attendeeIP=' + onslyde.ws.getip());
-          }
-        }, false);
 
+      if("WebSocket" in window && WebSocket.CLOSED > 2){
+        ws = onslyde.ws.connect(null,'',onslyde.ws.sessionID());
       }else{
         ws = new FallbackSocket();
       }
