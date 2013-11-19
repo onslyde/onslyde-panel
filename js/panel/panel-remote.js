@@ -151,7 +151,6 @@ window.addEventListener('remoteMarkup', function (e) {
   if (typeof e.data !== 'object' && e.data !== '') {
 
     var data = JSON.parse(e.data);
-    console.log('data.position', data.position, localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
     if (data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP) {
       handleSpeakEvent(data);
     } else {

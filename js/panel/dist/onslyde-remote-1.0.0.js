@@ -4,7 +4,8 @@ var speak = document.querySelector('#speak'),
   disagree = document.querySelector('#disagree'),
   agree = document.querySelector('#agree'),
   voted,
-  isSpeaking = false;
+  isSpeaking = false,
+  wsf = null;
 
 
 
@@ -13,7 +14,7 @@ speak.onclick = function (event) {
   if (window.userObject.name === '') {
     speak.onclick = onslyde.oauth.handleAuthClick;
   } else {
-    onslyde.ws._send('speak:' + JSON.stringify(userObject));
+    wsf.sendText('speak:' + JSON.stringify(userObject));
     speak.value = 'Cancel';
   }
 };
@@ -25,7 +26,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  onslyde.ws._send('props:disagree,' + window.userObject.name + "," + window.userObject.email);
+  wsf.sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -46,7 +47,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  onslyde.ws._send('props:agree,' + window.userObject.name + "," + window.userObject.email);
+  wsf.sendText('props:agree,' + window.userObject.name + "," + window.userObject.email);
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";
@@ -152,7 +153,6 @@ window.addEventListener('remoteMarkup', function (e) {
   if (typeof e.data !== 'object' && e.data !== '') {
 
     var data = JSON.parse(e.data);
-    console.log('data.position', data.position, localStorage['onslyde.attendeeIP'], localStorage['onslyde.attendeeIP'] === data.attendeeIP);
     if (data !== '' && localStorage['onslyde.attendeeIP'] === data.attendeeIP) {
       handleSpeakEvent(data);
     } else {
@@ -216,7 +216,7 @@ function getParameterByName(name) {
         authHolder.style.display = 'none';
         speakButton.onclick = function(event) {
           _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-          onslyde.ws._send('speak:' + JSON.stringify(window.userObject));
+          wsf.sendText('speak:' + JSON.stringify(window.userObject));
           if(speak.value === 'Cancel'){
             speak.value = 'I want to speak';
           }else{
@@ -263,11 +263,9 @@ function getParameterByName(name) {
 (function (window, document) {
   "use strict";
 
-
-
   window.addEventListener('load', function (e) {
     // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-    onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
+    wsf = onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   }, false);
 
 onslyde.wsFallback = onslyde.prototype = {
@@ -378,11 +376,16 @@ onslyde.wsFallback = onslyde.prototype = {
           },
           onopen:function () {
           },
-          onmessage:function () {
+          onmessage:function (message) {
+            //use the same message handler as core ws
+            onslyde.ws._onmessage(message);
           },
           onerror:function () {
           },
           onclose:function () {
+          },
+          sendText:function(text){
+            fws.send(text);
           },
           previousRequest:null,
           currentRequest:null
