@@ -23,7 +23,7 @@
         authHolder.style.display = 'none';
         speakButton.onclick = function(event) {
           _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
-          onslyde.ws._send('speak:' + JSON.stringify(window.userObject));
+          wsf.sendText('speak:' + JSON.stringify(window.userObject));
           if(speak.value === 'Cancel'){
             speak.value = 'I want to speak';
           }else{

@@ -77,7 +77,8 @@ module.exports = function(grunt) {
           console: true,
           navigator: true,
           getAttendees: true,
-          alert: true
+          alert: true,
+          wsf: true
         }
       },
       gruntfile: {

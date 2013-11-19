@@ -213,7 +213,9 @@
         };
         ws.onmessage = this._onmessage;
         ws.onclose = this._onclose;
-
+        ws.sendText = function(text){
+          onslyde.ws._send(text);
+        };
         return ws;
       },
 

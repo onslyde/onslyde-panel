@@ -1,11 +1,9 @@
 (function (window, document) {
   "use strict";
 
-
-
   window.addEventListener('load', function (e) {
     // in fallback mode: connect returns a dummy object implementing the WebSocket interface
-    onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
+    wsf = onslyde.wsFallback.createSocket().gracefulWebSocket('ws://' + onslyde.ws.ip(onslyde.ws.sessionID()) + ':8081'); // the ws-protocol will automatically be changed to http
   }, false);
 
 onslyde.wsFallback = onslyde.prototype = {
@@ -116,11 +114,16 @@ onslyde.wsFallback = onslyde.prototype = {
           },
           onopen:function () {
           },
-          onmessage:function () {
+          onmessage:function (message) {
+            //use the same message handler as core ws
+            onslyde.ws._onmessage(message);
           },
           onerror:function () {
           },
           onclose:function () {
+          },
+          sendText:function(text){
+            fws.send(text);
           },
           previousRequest:null,
           currentRequest:null
