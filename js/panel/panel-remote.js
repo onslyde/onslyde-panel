@@ -1,18 +1,28 @@
-var speak = document.querySelector('#speak'),
-  disagree = document.querySelector('#disagree'),
-  agree = document.querySelector('#agree'),
+var speak = document.getElementById('speak'),
+  disagree = document.getElementById('disagree'),
+  agree = document.getElementById('agree'),
+  logo = document.getElementById('logo'),
   voted,
   isSpeaking = false,
-  wsf = null;
+  wsf = null,
+  voteCount = 0,
+  voteKey = {1:'slow',2:'fast',3:'faster',4:'fuckingfast'};
 
-
+function sendText(text){
+  voteCount++;
+  console.log(voteCount,logo.classList);
+  if(voteCount > 0 && voteCount < 5){
+    logo.setAttribute('class','logo-banner ' + voteKey[voteCount]);
+  }
+  wsf.sendText(text);
+}
 
 speak.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-speak', 'vote']);
   if (window.userObject.name === '') {
     speak.onclick = onslyde.oauth.handleAuthClick;
   } else {
-    wsf.sendText('speak:' + JSON.stringify(userObject));
+    sendText('speak:' + JSON.stringify(userObject));
     speak.value = 'Cancel';
   }
 };
@@ -24,7 +34,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  wsf.sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email);
+  sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email);
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -45,7 +55,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  wsf.sendText('props:agree,' + window.userObject.name + "," + window.userObject.email);
+  sendText('props:agree,' + window.userObject.name + "," + window.userObject.email);
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";

@@ -67,25 +67,7 @@ Mobile Device Page Setup
 
 }
 
-#browser::after {
-  content: "";
-  /*background: url(http://db.tt/Bjow1L0I) no-repeat 0 0;*/
-  /*-webkit-background-size: cover;*/
-  /*-moz-background-size: cover;*/
-  /*-o-background-size: cover;*/
-  /*background-size: cover;*/
-  opacity: 1;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
-  /*-webkit-animation: spin 4s infinite linear;*/
-  /*-moz-animation: spin 4s infinite linear;*/
-  /*-ms-animation: spin 4s infinite linear;*/
-  /*animation: spin 4s infinite linear;*/
-}
+
 
 @-moz-keyframes spin {
   from { -moz-transform: rotate(0deg); }
@@ -301,8 +283,7 @@ nav.primary > ul li a {
 }
 
 nav.primary li.logo-banner {
-  background: url(../../images/chrome.png) no-repeat 50%, #fff;
-  background-size: 50px;
+  position: relative;
   /*background: -moz-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
   /*background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#6aa5db),color-stop(100%,#3983c7));*/
   /*background: -webkit-linear-gradient(top,#6aa5db 0,#3983c7 100%);*/
@@ -312,7 +293,62 @@ nav.primary li.logo-banner {
   text-align: center;
   padding: 6px 0 6px 0;
   height: 50px;
+  background:transparent;
+
 }
+
+nav.primary li.logo-banner::after {
+  content: "";
+  background: url(../../images/chrome.png) no-repeat 50%, #fff;
+  background-size: 50px;
+  background-color: transparent;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -100;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: spin 15s infinite linear;
+  -moz-animation: spin 15s infinite linear;
+  -ms-animation: spin 15s infinite linear;
+  animation: spin 15s infinite linear;
+
+}
+
+nav.primary li.logo-banner.slow{
+  -webkit-animation: spin 3s infinite linear;
+  -moz-animation: spin 3s infinite linear;
+  -ms-animation: spin 3s infinite linear;
+  animation: spin 3s infinite linear;
+}
+
+nav.primary li.logo-banner.fast{
+  -webkit-animation: spin 3s infinite linear;
+  -moz-animation: spin 3s infinite linear;
+  -ms-animation: spin 3s infinite linear;
+  animation: spin 3s infinite linear;
+}
+
+nav.primary li.logo-banner.faster{
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -ms-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+
+nav.primary li.logo-banner.fuckingfast{
+  -webkit-animation: spin 0.1s infinite linear;
+  -moz-animation: spin 0.1s infinite linear;
+  -ms-animation: spin 0.1s infinite linear;
+  animation: spin 0.1s infinite linear;
+}
+
 
 .tweet-button {
   font-size: 1rem;
