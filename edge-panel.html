@@ -145,11 +145,11 @@
 
 </script>
 
-<script src="//onslyde.com/js/qrcode.js"></script>
+<script src="//www.onslyde.com/js/qrcode.js"></script>
 <script>
   qrInterval = setInterval(function(){
     if(document.getElementById('sessionID').innerHTML != ''){
-      document.getElementById('qr').innerHTML = create_qrcode('//onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+      document.getElementById('qr').innerHTML = create_qrcode('//www.onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
       clearInterval(qrInterval)
     }
   },1000)

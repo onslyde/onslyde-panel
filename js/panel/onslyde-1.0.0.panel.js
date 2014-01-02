@@ -195,7 +195,7 @@
           if (!ip) {
             ip = this.ip(thisSessionID);
           }
-          var location = 'ws://' + ip + ':8081/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
+          var location = 'wss://' + ip + '/ws/?session=' + thisSessionID + '&attendeeIP=' + this.getip();
           ws = new WebSocket(location);
         } else {
           //we sent in a mock object from jquery polling
