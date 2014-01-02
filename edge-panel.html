@@ -8,7 +8,7 @@
 
   <meta name="description" content="onslyde example">
   <meta name="author" content="Wesley Hales">
-  <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/panel/edge-panel.css">
 </head>
 <body>
@@ -145,11 +145,11 @@
 
 </script>
 
-<script src="http://onslyde.com/js/qrcode.js"></script>
+<script src="//onslyde.com/js/qrcode.js"></script>
 <script>
   qrInterval = setInterval(function(){
     if(document.getElementById('sessionID').innerHTML != ''){
-      document.getElementById('qr').innerHTML = create_qrcode('http://onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+      document.getElementById('qr').innerHTML = create_qrcode('//onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
       clearInterval(qrInterval)
     }
   },1000)
