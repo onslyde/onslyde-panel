@@ -130,17 +130,25 @@
     onslyde.ws = onslyde.prototype = {
 
       ip: function (thisSessionID) {
+
+        var BASE_URL;
+        if(location.host.indexOf('onslyde.com') >= 0){
+          BASE_URL = 'https://www.onslyde.com:8443';
+        }else{
+          BASE_URL = 'https://127.0.0.1:8443';
+        }
+
         //todo come up with better approach :)
         //there are 3 environments in which this call must be made:
         //(1) running just HTML locally
         //(2) running the ws server and HTML locally
         //(3) prod where ip needs to be hard coded since we get ec2 private IP on this call
 
-        var ai = new onslyde.core.ajax('/go/presenters/ip?session=' + thisSessionID, function (text, url) {
+        var ai = new onslyde.core.ajax(BASE_URL + '/go/presenters/ip?session=' + thisSessionID, function (text, url) {
           if (location.host === 'onslyde.com') {
             //(3) - set proper IP if in prod
             //todo - even though we set the IP and don't use data from server, this http request bootstraps an internal piece on each connect
-            ip = '107.22.176.73';
+            ip = 'www.onslyde.com';
           } else {
             //(2) - set proper IP dynamically for locally running server
             ip = text;
@@ -155,7 +163,7 @@
           ai.doGet();
         } else {
           //(1) HTML is running locally and we can't make ajax request until implement jsonp or CORS headers
-          ip = '107.22.176.73';
+          ip = 'www.onslyde.com';
         }
 
         return ip;
@@ -243,6 +251,7 @@
       },
 
       _onclose: function (m) {
+        console.log('close it');
         ws = null;
       },
 
@@ -391,7 +400,7 @@
 
       connect : function(initString) {
         //ws connect
-//        console.log('connect',initString);
+        console.log(ws,'connect',initString);
         try {
           if (!ws) {
             onslyde.ws.connect(null, initString, sessionID);
