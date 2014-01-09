@@ -12,10 +12,9 @@ var speak = document.getElementById('speak'),
 
 function sendText(text){
   voteCount++;
-  console.log(voteCount,logo.classList);
-  if(voteCount > 0 && voteCount < 5){
-    logo.setAttribute('class','logo-banner ' + voteKey[voteCount]);
-  }
+//  if(voteCount > 0 && voteCount < 5){
+//    logo.setAttribute('class','logo-banner ' + voteKey[voteCount]);
+//  }
   wsf.sendText(text);
 }
 
