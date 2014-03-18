@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Onslyde Remote</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+  <!-- enable full-screen mode -->
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <!-- controls the appearance of the status bar in full-screen mode -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta http-equiv="cache-control" content="no-cache" />
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+  <link href="css/panel/edge-panel-remote.css?v=100" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div id="roulette"></div>
+<div id="browser">
+  <h2 id="panel-title"></h2>
+  <nav class="primary">
+    <ul>
+      <li>
+        <input id="toggle" class="button" type="submit" value="Toggle" />
+      </li>
+
+    </ul>
+      <ul id="question-container">Question</ul>
+  </nav>
+  <div id="auth-holder" class="auth-holder">
+    <span id="authorize-button"><i class="pictogram">&#62223</i> Authorize</span>
+    <div id="usercontent"></div>
+  </div>
+
+</div>
+
+<script type="text/html" id="question_template">
+    <%
+    var questions = activeQuestions;
+    for ( var i = 0; i < questions.length; i++ ) {
+    %>
+    <li>
+       <a href="#" onclick="sendText('questionIndex:<%=i%>');" style="padding: 15px;line-height: 79px;width: 100%;background-color:#ececec;color:#1a1a1a"><%=questions[i]%></a>
+    </li>
+    <% } %>
+</script>
+
+
+<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js" ></script>
+<script type="text/javascript">
+
+  function getParameterByName(name) {
+    var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }
+
+  var sessionID = (getParameterByName('sessionId') || 203);
+
+  onslyde({
+    panelRemote: {sessionID: sessionID}
+  });
+
+  function gplusCallBack(){
+    //google api won't take this as callback param for some reason
+    onslyde.oauth.handleClientLoad();
+  }
+
+</script>
+<script type="text/javascript" src="panelists-edge3.js"></script>
+<script type="text/javascript" src="js/panel/admin-remote.js" ></script>
+<script type="text/javascript" src="js/panel/gplus-oauth.js" ></script>
+<script type="text/javascript" src="js/panel/gracefulWebSocket.js" ></script>
+
+<script src="https://apis.google.com/js/client.js?onload=gplusCallBack"></script>
+
+<script type="text/javascript">
+
+    var activePanel = getPanelists(sessionID),
+        activeQuestions = activePanel.questions;
+
+    document.getElementById('question-container').innerHTML = onslyde.template.simple('question_template',activeQuestions);
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31854873-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

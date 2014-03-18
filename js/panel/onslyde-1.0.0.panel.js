@@ -283,7 +283,8 @@
       rollingAverageEnabled = true,
       currentVotes = {agree:0, disagree:0},
       queueTitle,
-      connectInfoMode = false;
+      connectInfoMode = false,
+      currentQuestionIndex = 0;
 
     onslyde.panel = onslyde.prototype = {
 
@@ -315,6 +316,16 @@
 
         window.addEventListener('agree', function (e) {
           handleProps('agree');
+        }, false);
+
+        window.addEventListener('questionToggle', function (e) {
+          onslyde.panel.questionToggle();
+        }, false);
+
+        window.addEventListener('questionIndex', function (e) {
+          currentQuestionIndex = (e.index || '0');
+          currentQuestionIndex = parseInt(currentQuestionIndex,10);
+          onslyde.panel.questionIndex(currentQuestionIndex);
         }, false);
         //-----------end event listeners
 
@@ -412,6 +423,26 @@
         }
       },
 
+      questionToggle : function(){
+        var questions = document.getElementById('question-container');
+        if(questions.style.display === 'none'){
+          questions.style.display = 'block';
+        }else{
+          questions.style.display = 'none';
+        }
+      },
+
+      questionIndex : function(){
+        var questions = document.querySelectorAll('#question-container li');
+        for(var i = 0; i < questions.length; i++){
+          if(i !== currentQuestionIndex){
+            questions[i].style.display = 'none';
+          }else{
+            questions[i].style.display = 'block';
+          }
+        }
+      },
+
       toggleConnectInfo : function(){
         if(!connectInfoMode){
           document.getElementById("panel-container").className = "blur";
@@ -445,6 +476,8 @@
       },
 
       createSpeakerNode:function (speaker, ip, fn) {
+        speaker.name = (speaker.name || speaker.FirstName + ' ' + speaker.Surname);
+
         var fragment = document.createDocumentFragment();
         fragment.appendChild(document.getElementById('speaker-template').cloneNode(true));
         var image = fragment.querySelector('img');
@@ -527,6 +560,9 @@
       },
 
       speakerLive:function (speaker, ip) {
+        //create full speaker name
+        speaker.name = (speaker.name || speaker.FirstName + ' ' + speaker.Surname);
+
         var currentSpeakerNode = document.getElementById('currentSpeaker');
         currentSpeakerNode.innerHTML = '';
         currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.removeSpeakerFromLive));

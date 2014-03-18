@@ -471,3 +471,9 @@ h2, h3 {
   transform: scale(1.05);
 }
 
+#question-container {
+  position: absolute;
+  z-index: 1;
+
+}
+

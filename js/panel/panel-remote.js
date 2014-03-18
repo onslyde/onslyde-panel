@@ -33,7 +33,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email);
+  sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email + ',' + new Date().getTime());
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -54,7 +54,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  sendText('props:agree,' + window.userObject.name + "," + window.userObject.email);
+  sendText('props:agree,' + window.userObject.name + "," + window.userObject.email + ',' + new Date().getTime());
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";
