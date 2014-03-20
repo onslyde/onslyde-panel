@@ -39,8 +39,8 @@
     var questions = activeQuestions;
     for ( var i = 0; i < questions.length; i++ ) {
     %>
-    <li>
-       <a href="#" onclick="sendText('questionIndex:<%=i%>');" style="padding: 15px;line-height: 79px;width: 100%;background-color:#ececec;color:#1a1a1a"><%=questions[i]%></a>
+    <li style="padding: 15px;width: 90%;background-color:#ececec;margin: 4px auto;">
+       <a href="#" onclick="sendText('questionIndex:<%=i%>');" style="color:#1a1a1a;"><%=questions[i]%></a>
     </li>
     <% } %>
 </script>
