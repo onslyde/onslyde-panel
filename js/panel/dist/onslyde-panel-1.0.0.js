@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2014-03-18
+/*! onslyde - v0.0.1 - 2014-03-19
 * Copyright (c) 2014 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";
@@ -178,7 +178,7 @@
 
         username = 'anonymous';
         //here we check to see if we're passing in our mock websocket object from polling clients (using gracefulWebSocket.js)
-        console.log('connecting now', websocket);
+//        console.log('connecting now', websocket);
         //if websocket doesn't exist, create one from spec
         if (!websocket) {
           if (!ip) {
@@ -392,7 +392,7 @@
 
       connect : function(initString) {
         //ws connect
-        console.log(ws,'connect',initString);
+//        console.log(ws,'connect',initString);
         try {
           if (!ws) {
             onslyde.ws.connect(null, initString, sessionID);
@@ -559,14 +559,16 @@
         //client side
         onslyde.panel.resetAllVotes();
 
-        var twitterHandle = (speaker.twitter ? '@' + speaker.twitter : speaker.name);
-        var gplusHandle = (speaker.gplus ? '+' + speaker.gplus : speaker.name);
-        onslyde.panel.connect(activeOptionsString);
-        onslyde.panel.sendMarkup('' +
-          '<span class="currently-speaking">Currently Speaking:</span><span class="speaker-name">' + speaker.name + '</span>' +
-          '<span class="tweet-button"><a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent('Listening to ' + twitterHandle + ' talk about...') + '" target="_blank"><i class="pictogram">&#62217;</i></a></span>' +
-          '<span class="tweet-button"><a href="https://plus.google.com/' + gplusHandle + '" target="_blank"><i class="pictogram">&#62223;</i></a></span>' +
-          '');
+        var twitterHandle = speaker.twitter,
+          tweetButton = '<span class="tweet-button"><a href="https://twitter.com/' + twitterHandle + '" target="_blank"><i class="pictogram">&#62217;</i></a></span>';
+
+        if(!twitterHandle){
+          tweetButton = '';
+        }
+          onslyde.panel.connect(activeOptionsString);
+          onslyde.panel.sendMarkup('' +
+            '<span class="currently-speaking">Currently Speaking:</span><span class="speaker-name">' + speaker.name + '</span>' +
+            tweetButton + '');
 
 
         //adjust UI
@@ -680,7 +682,7 @@
         } else {
           activeOptionsString = 'activeOptions:null,null,' + groupIndex + ':' + groupSlideIndex;
         }
-        console.log(activeOptionsString);
+//        console.log(activeOptionsString);
         this.connect(activeOptionsString);
         //clear options after sending
 //        activeOptions = [];
