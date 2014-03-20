@@ -9,7 +9,7 @@
   <meta name="description" content="onslyde example">
   <meta name="author" content="Wesley Hales">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="css/panel/edge-panel.css">
+  <link rel="stylesheet" href="https://www.onslyde.com/panel/css/panel/edge-panel.css">
 </head>
 <body>
 
@@ -129,8 +129,8 @@
 
 
 <script type="text/javascript" src="attendees-edge3.js"></script>
-<script type="text/javascript" src="panelists-edge3.js"></script>
-<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js"></script>
+<script type="text/javascript" src="https://www.onslyde.com/panel/panelists-edge3.js"></script>
+<script type="text/javascript" src="https://www.onslyde.com/panel/js/panel/dist/onslyde-panel-1.0.0.min.js"></script>
 <script type="text/javascript">
   onslyde({
     panel: {sessionID: sessionID, mode:'default'}
@@ -159,11 +159,11 @@
 
 </script>
 
-<script src="//www.onslyde.com/js/qrcode.js"></script>
+<script src="https://www.onslyde.com/js/qrcode.js"></script>
 <script>
   qrInterval = setInterval(function(){
     if(document.getElementById('sessionID').innerHTML != ''){
-      document.getElementById('qr').innerHTML = create_qrcode('//www.onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+      document.getElementById('qr').innerHTML = create_qrcode('https://www.onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
       clearInterval(qrInterval)
     }
   },1000)
