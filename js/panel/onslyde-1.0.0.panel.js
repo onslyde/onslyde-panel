@@ -160,7 +160,8 @@
         //todo - this needs to be refactored with a whitelist for all 4 environments.
         if (ip === null && location.protocol !== "file:" && location.host !== 'localhost:8001') {
           //(3) and (2) make sure we make the ajax request
-          ai.doGet();
+//          ai.doGet();
+          ip = 'www.onslyde.com';
         } else {
           //(1) HTML is running locally and we can't make ajax request until implement jsonp or CORS headers
           ip = 'www.onslyde.com';
