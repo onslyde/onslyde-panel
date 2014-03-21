@@ -14,17 +14,17 @@
 <body>
 
 <section id="panel-container">
-  <header class="primary-header">
-    <div class="connect-url" onclick="onslyde.panel.toggleConnectInfo()">
-      <i class="pictogram">&#128241;</i> onslyde.com/go/<span id="sessionID"></span>
-    </div>
-    <div class="session-time light">
-      <span><span class="bold" id="timer"></span> session time</span>
-    </div>
-    <div class="total-attendees light">
-      <span><span class="bold" id="totalCount">0</span> connected delegates </span>
-    </div>
-  </header>
+    <header class="primary-header">
+        <div class="connect-url" onclick="onslyde.panel.toggleConnectInfo()">
+            <i class="pictogram">&#128241;</i> <span id="short-url"></span><span id="sessionID" style="display:none"></span>
+        </div>
+        <div class="session-time light">
+            <span><span class="bold" id="timer"></span> session time</span>
+        </div>
+        <div class="total-attendees light">
+            <span><span class="bold" id="totalCount">0</span> connected delegates </span>
+        </div>
+    </header>
 
     <header class="secondary-header bold" id="panel-title">
         Rendering Performance
