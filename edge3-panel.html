@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <title>Onslyde Panel</title>
+    <title>Onslyde Panel</title>
 
-  <meta name="description" content="onslyde example">
-  <meta name="author" content="Wesley Hales">
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://www.onslyde.com/panel/css/panel/edge-panel.css">
+    <meta name="description" content="onslyde example">
+    <meta name="author" content="Wesley Hales">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://www.onslyde.com/panel/css/panel/edge-panel.css">
 </head>
 <body>
 
@@ -26,93 +26,93 @@
     </div>
   </header>
 
-  <header class="secondary-header bold" id="panel-title">
-    Rendering Performance
-  </header>
+    <header class="secondary-header bold" id="panel-title">
+        Rendering Performance
+    </header>
 
-  <div class="content">
-     <ul id="question-container" style="display: none;">Question</ul>
+    <div class="content">
+        <ul id="question-container" style="display: none;">Question</ul>
 
-    <section class="left-col">
+        <section class="left-col">
 
-      <div class="speaking-now">
-        <div class="speaking-now-title light">Speaking now:</div>
-        <div id="currentSpeaker" class="bold">Discussion</div>
-      </div>
+            <div class="speaking-now">
+                <div class="speaking-now-title light">Speaking now:</div>
+                <div id="currentSpeaker" class="bold">Discussion</div>
+            </div>
 
-      <div class="panel">
+            <div class="panel">
 
-        <h3>Panel</h3>
+                <h3>Panel</h3>
 
-        <ul id="panelists" class="panel-list">
+                <ul id="panelists" class="panel-list">
 
-        </ul>
-      </div>
+                </ul>
+            </div>
 
-    </section>
-
-    <section class="right-col">
-
-      <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
-        <div class="sentiment-bar1">
-
-          <div id="sentiment-chart-disagree" class="transition"><span id="disagreeCount">0</span></div>
-        </div>
-        <div class="sentiment-bar2">
-
-          <div id="sentiment-chart-agree" class="transition"><span id="agreeCount">0</span></div>
-        </div>
-      </div>
-
-      <h3 class="queue-title" onclick="onslyde.panel.clearQueue()">Delegates Queued to Speak (<span id="queuedSpeakers">0</span>)</h3>
-      <div class="speaker-queue-container">
-
-        <section class="speaker-list" id="speakerQueue">
         </section>
 
-      </div>
-    </section>
+        <section class="right-col">
 
-  </div>
+            <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
+                <div class="sentiment-bar1">
 
-  <div style="display:none">
-    <div id="speaker-template">
-      <img src="" alt="" />
-      <ul class="speaker-details">
-        <li class="name"></li>
-        <li class="org"></li>
-      </ul>
+                    <div id="sentiment-chart-disagree" class="transition"><span id="disagreeCount">0</span></div>
+                </div>
+                <div class="sentiment-bar2">
+
+                    <div id="sentiment-chart-agree" class="transition"><span id="agreeCount">0</span></div>
+                </div>
+            </div>
+
+            <h3 class="queue-title" onclick="onslyde.panel.clearQueue()">Delegates Queued to Speak (<span id="queuedSpeakers">0</span>)</h3>
+            <div class="speaker-queue-container">
+
+                <section class="speaker-list" id="speakerQueue">
+                </section>
+
+            </div>
+        </section>
+
     </div>
-  </div>
+
+    <div style="display:none">
+        <div id="speaker-template">
+            <img src="" alt="" />
+            <ul class="speaker-details">
+                <li class="name"></li>
+                <li class="org"></li>
+            </ul>
+        </div>
+    </div>
 </section>
 
 <section id="modal" onclick="onslyde.panel.toggleConnectInfo()">
-  <div id="modal-connect-string"></div>
-  <div id="qr"></div>
+    <div id="modal-connect-string"></div>
+    <div id="qr"></div>
 </section>
 <script>
-  function getParameterByName(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-  }
-  var sessionID = (getParameterByName('sessionId') || 578);
+    function getParameterByName(name) {
+        var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
+    var sessionID = (getParameterByName('sessionId') || 578);
 
 </script>
 
 <script type="text/html" id="panelist_template">
-  <%
-  var panelists = activePanelists;
-  for ( var i = 0; i < panelists.length; i++ ) {
-  %>
-  <li class="<%= panelists[i].mod === true ? 'moderator' : ''%>">
-    <img src="<%=panelists[i].pic%>" alt="<%=panelists[i].name%>" />
-    <ul class="panelist-details">
-      <li class="name"><%=panelists[i].FirstName%> <%=panelists[i].Surname%></li>
-      <li class="org"><%=panelists[i].org%></li>
-      <li class="<%= panelists[i].mod === true ? 'mod' : 'hide'%>">Moderator</li>
-    </ul>
-  </li>
-  <% } %>
+    <%
+    var panelists = activePanelists;
+    for ( var i = 0; i < panelists.length; i++ ) {
+    %>
+    <li class="<%= panelists[i].mod === true ? 'moderator' : ''%>">
+        <img src="<%=panelists[i].pic%>" alt="<%=panelists[i].name%>" />
+        <ul class="panelist-details">
+            <li class="name"><%=panelists[i].FirstName%> <%=panelists[i].Surname%></li>
+            <li class="org"><%=panelists[i].org%></li>
+            <li class="<%= panelists[i].mod === true ? 'mod' : 'hide'%>">Moderator</li>
+        </ul>
+    </li>
+    <% } %>
 </script>
 
 
@@ -132,41 +132,41 @@
 <script type="text/javascript" src="https://www.onslyde.com/panel/panelists-edge3.js"></script>
 <script type="text/javascript" src="https://www.onslyde.com/panel/js/panel/dist/onslyde-panel-1.0.0.min.js"></script>
 <script type="text/javascript">
-  onslyde({
-    panel: {sessionID: sessionID, mode:'default'}
-  });
+    onslyde({
+        panel: {sessionID: sessionID, mode:'default'}
+    });
 </script>
 
 <script>
 
-  var activePanel = getPanelists(sessionID),
-  activePanelists = activePanel.panelists,
-  activeQuestions = activePanel.questions;
+    var activePanel = getPanelists(sessionID),
+            activePanelists = activePanel.panelists,
+            activeQuestions = activePanel.questions;
 
-  document.getElementById('panelists').innerHTML = onslyde.template.simple('panelist_template',activePanelists);
-  document.getElementById('question-container').innerHTML = onslyde.template.simple('question_template',activeQuestions);
+    document.getElementById('panelists').innerHTML = onslyde.template.simple('panelist_template',activePanelists);
+    document.getElementById('question-container').innerHTML = onslyde.template.simple('question_template',activeQuestions);
 
-  var panelistNodes = document.querySelectorAll('#panelists > li');
+    var panelistNodes = document.querySelectorAll('#panelists > li');
 
-  var onclickHelper = function (e,a) {
-    return function (f) {
-      onslyde.panel.speakerLive(e,'111.111.111.11' + a)
+    var onclickHelper = function (e,a) {
+        return function (f) {
+            onslyde.panel.speakerLive(e,'111.111.111.11' + a)
+        };
     };
-  };
-  for(var i=0;i<panelistNodes.length;i++){
-    panelistNodes[i].onclick = onclickHelper(activePanelists[i],i);
-  };
+    for(var i=0;i<panelistNodes.length;i++){
+        panelistNodes[i].onclick = onclickHelper(activePanelists[i],i);
+    };
 
 </script>
 
 <script src="https://www.onslyde.com/js/qrcode.js"></script>
 <script>
-  qrInterval = setInterval(function(){
-    if(document.getElementById('sessionID').innerHTML != ''){
-      document.getElementById('qr').innerHTML = create_qrcode('https://www.onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
-      clearInterval(qrInterval)
-    }
-  },1000)
+    qrInterval = setInterval(function(){
+        if(document.getElementById('sessionID').innerHTML != ''){
+            document.getElementById('qr').innerHTML = create_qrcode('https://www.onslyde.com/go/' + document.getElementById('sessionID').innerHTML);
+            clearInterval(qrInterval)
+        }
+    },1000)
 
 </script>
 

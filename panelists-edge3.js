@@ -7,7 +7,7 @@ function getPanelists(sessionID) {
     {"Surname": "Komoroske", "FirstName": "Alex", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/alex-komoroske.jpg", "twitter": "@jkomoros", "org": "Google"},
     {"Surname": "Penades", "FirstName": "Soledad", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/soledad-penades.jpg", "twitter": "@supersole", "org": "Mozilla"},
     {"Surname": "Sullivan", "FirstName": "Nicole", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/nicole-sullivan.jpg", "twitter": "@stubbornella", "org": "Pivotal Labs"}
-  ], "questions": ["We\u2019re all aiming towards better page-load times. HTML imports can include other imports, es6 modules can include other modules, to what extent does compotentisation break web performance by breaking parallelism?", "How do components help or hinder responsive design? Given that media queries are orthogonal to components, how can components play well with responsive design approaches?", "How will components work with content security policy? Polymer and other initial components require eval or use inline scripts. Will components become another vector for snowden-esque attacks? What\u2019s the security story for components?", "Do you think Web Components open the door for developers to abandon semantics? Will we end up with a million different home-grown <select> widgets? And if so, how can developers choose between them?", "What is the internationalization story for web components? Is every component supposed to have hooks for i18n? Or can user of component somehow swap or inject translated strings?", "How can web components be used to enhance accessibility? Can shared standards for interaction be developed and agreed upon for common components?", "Until web components are more widely supported, in what use cases would you consider polyfills like Polymer or X-Tags over alternative component frameworks. To what extent do the existence of polyfills hinder \/ slow the implementation of web components?"]}, "developer_tooling": {"panelists": [
+  ], "questions": ["We\u2019re all aiming towards better page-load times. HTML imports can include other imports, es6 modules can include other modules, to what extent does compotentisation break web performance by breaking parallelism?", "How do components help or hinder responsive design? Given that media queries are orthogonal to components, how can components play well with responsive design approaches?", "How will components work with content security policy? Polymer and other initial components require eval or use inline scripts. Will components become another vector for snowden-esque attacks? What\u2019s the security story for components?", "Do you think Web Components open the door for developers to abandon semantics? Will we end up with a million different home-grown select widgets? And if so, how can developers choose between them?", "What is the internationalization story for web components? Is every component supposed to have hooks for i18n? Or can user of component somehow swap or inject translated strings?", "How can web components be used to enhance accessibility? Can shared standards for interaction be developed and agreed upon for common components?", "Until web components are more widely supported, in what use cases would you consider polyfills like Polymer or X-Tags over alternative component frameworks. To what extent do the existence of polyfills hinder \/ slow the implementation of web components?"]}, "developer_tooling": {"panelists": [
     {"Surname": "Archibald", "FirstName": "Jake", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/jake-archibald.jpg", "twitter": "@jaffathecake", "org": "Google"},
     {"Surname": "Auchenberg", "FirstName": "Kenneth", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/kenneth-auchenberg.jpg", "twitter": "@auchenberg", "org": "Podio"},
     {"Surname": "Irish", "FirstName": "Paul", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/paul-irish.jpg", "twitter": "@paul_irish", "org": "Google"},
@@ -52,36 +52,44 @@ function getPanelists(sessionID) {
   ], "questions": ["What is the role of the web in the world of wearables with no screen?", "The future of the web will see a rising importance in optimising sites for use in China and working with their national firewall. Many popular embeddable services such as YouTube are blocked. How do we accommodate different national attitudes to privacy, sensitive content, inappropriate content and so on?", "Does the \"future of the web\" hinge more on us converging and consolidating functionality on pre-agreed standards, or - as is suggested by the Extensible Web Manifesto -  on empowering developers at a lower-level to do whatever they want and effectively create their own de-facto standards? Will it increase the trend of the Web \"incrementing itself to death\"?", "In its march toward increasing sophistication is the Web losing touch with being easy to learn and therefore accessible to a very broad authorship community?", "Historically the Web had a publisher vs consumer model. With WebRTC and to choose Snapschat as a product example, is the future of the Web peer-to-peer publishing and consumption?", "Is the web going to grow into all-encompassing platform for all future computing? Is there any area which will be spared? By contrast, Is the future of the web just providing APIs for native applications to be built?", "Web developers and even corporations that are outside the browser vendor community have the feeling of being a prisoner to decisions others make, with often limited means to address certain problems. Who should be determining the future of the Web and how?"]}
   };
 
-  var selectedPanel;
-  var panelTitle = document.getElementById('panel-title');
+  var selectedPanel,
+  panelTitle = document.getElementById('panel-title'),
+  shortUrl = (document.getElementById('short-url') || {});
   switch (parseInt(sessionID, 10)) {
     case 578:
       selectedPanel = allpanels.components;
       panelTitle.innerHTML = "Components";
+      shortUrl.innerHTML = "goo.gl/v3E8Wt";
       break;
     case 579:
       selectedPanel = allpanels.developer_tooling;
       panelTitle.innerHTML = "Developer Tooling";
+      shortUrl.innerHTML = "goo.gl/jrGNll";
       break;
     case 580:
       selectedPanel = allpanels.build_process;
       panelTitle.innerHTML = "Build Process";
+      shortUrl.innerHTML = "goo.gl/Zaf7BI";
       break;
     case 581:
       selectedPanel = allpanels.page_load_performance;
       panelTitle.innerHTML = "Page Load Performance";
+      shortUrl.innerHTML = "goo.gl/vGkdl7";
       break;
     case 582:
       selectedPanel = allpanels.pointers_and_interactions;
       panelTitle.innerHTML = "Pointers and Interactions";
+      shortUrl.innerHTML = "goo.gl/dERgy6";
       break;
     case 583:
       selectedPanel = allpanels.accessibility;
       panelTitle.innerHTML = "Accessibility";
+      shortUrl.innerHTML = "goo.gl/YmcYuX";
       break;
     case 584:
       selectedPanel = allpanels.future_web;
       panelTitle.innerHTML = "Future Web";
+      shortUrl.innerHTML = "goo.gl/4VBLdK";
       break;
   }
   return selectedPanel;
