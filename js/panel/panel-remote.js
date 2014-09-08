@@ -1,4 +1,4 @@
-(function(window,undefined){
+//(function(window,undefined){
 
 
 var speak = document.getElementById('speak'),
@@ -222,4 +222,4 @@ function getParameterByName(name) {
 }
 
 
-}(window));
+//}(window));
