@@ -1,3 +1,6 @@
+(function(window,undefined){
+
+
 var speak = document.getElementById('speak'),
   disagree = document.getElementById('disagree'),
   agree = document.getElementById('agree'),
@@ -6,7 +9,28 @@ var speak = document.getElementById('speak'),
   isSpeaking = false,
   wsf = null,
   voteCount = 0,
-  voteKey = {1:'slow',2:'fast',3:'faster',4:'fuckingfast'};
+  voteKey = {1:'slow',2:'fast',3:'faster',4:'fuckingfast'},
+  offset;
+
+  var reqListener = function() {
+    var dateStr = oReq.getResponseHeader('Date');
+    var serverTimeMillisGMT = Date.parse(new Date(Date.parse(dateStr)).toUTCString());
+    console.log(new Date(Date.parse(dateStr)),new Date(Date.parse(dateStr)).toUTCString(),serverTimeMillisGMT);
+    var localMillisUTC = Date.parse(new Date().toUTCString());
+    offset = serverTimeMillisGMT -  localMillisUTC;
+  };
+
+  var oReq = new XMLHttpRequest();
+  oReq.onload = reqListener;
+  oReq.open("GET", "/", false);
+  oReq.send();
+
+  function getServerTime() {
+    var date = new Date();
+    date.setTime(date.getTime() + offset);
+    return date;
+  }
+
 
 function sendText(text){
   voteCount++;
@@ -33,7 +57,7 @@ var agreeTimeout,
 
 disagree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-disagree', 'vote']);
-  sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email + ',' + new Date().getTime());
+  sendText('props:disagree,' + window.userObject.name + "," + window.userObject.email + ',' + getServerTime().getTime());
   disagree.disabled = true;
   disagree.style.opacity = 0.4;
 
@@ -54,7 +78,7 @@ disagree.onclick = function (event) {
 
 agree.onclick = function (event) {
   _gaq.push(['_trackEvent', 'onslyde-agree', 'vote']);
-  sendText('props:agree,' + window.userObject.name + "," + window.userObject.email + ',' + new Date().getTime());
+  sendText('props:agree,' + window.userObject.name + "," + window.userObject.email + ',' + getServerTime().getTime());
   agree.disabled = true;
   agree.style.opacity = 0.4;
 //  agree.value = "vote again in 15 seconds";
@@ -197,3 +221,5 @@ function getParameterByName(name) {
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
+
+}(window));
