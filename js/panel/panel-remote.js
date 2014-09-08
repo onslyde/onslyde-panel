@@ -16,7 +16,6 @@ var speak = document.getElementById('speak'),
   var reqListener = function() {
     var dateStr = oReq.getResponseHeader('Date');
     var serverTimeMillisGMT = Date.parse(new Date(Date.parse(dateStr)).toUTCString());
-    console.log(new Date(Date.parse(dateStr)),new Date(Date.parse(dateStr)).toUTCString(),serverTimeMillisGMT);
     var localMillisUTC = Date.parse(new Date().toUTCString());
     offset = serverTimeMillisGMT -  localMillisUTC;
   };
