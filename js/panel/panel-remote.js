@@ -10,7 +10,8 @@ var speak = document.getElementById('speak'),
   wsf = null,
   voteCount = 0,
   voteKey = {1:'slow',2:'fast',3:'faster',4:'fuckingfast'},
-  offset;
+  offset,
+  oReq;
 
   var reqListener = function() {
     var dateStr = oReq.getResponseHeader('Date');
@@ -20,7 +21,7 @@ var speak = document.getElementById('speak'),
     offset = serverTimeMillisGMT -  localMillisUTC;
   };
 
-  var oReq = new XMLHttpRequest();
+  oReq = new XMLHttpRequest();
   oReq.onload = reqListener;
   oReq.open("GET", "/", false);
   oReq.send();
