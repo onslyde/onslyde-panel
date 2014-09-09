@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2014-03-21
+/*! onslyde - v0.0.1 - 2014-09-09
 * Copyright (c) 2014 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";

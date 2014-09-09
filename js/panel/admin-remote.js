@@ -1,4 +1,4 @@
-var toggle = document.getElementById('toggle'),
+var
   next = document.getElementById('next'),
   clear = document.getElementById('clear'),
   wsf = null;
@@ -7,9 +7,11 @@ function sendText(text){
   wsf.sendText(text);
 }
 
-toggle.onclick = function (event) {
+function toggleQuestion(index){
   sendText('questionToggle:');
-};
+  sendText('questionIndex:' + index);
+}
+
 
 function getParameterByName(name) {
   var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
