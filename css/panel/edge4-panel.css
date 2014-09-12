@@ -6,6 +6,7 @@ body {
   font-family: 'Lato', sans-serif;
   color: #fff;
   overflow: hidden;
+  background-color: #ececec;
 }
 
 @font-face {
@@ -44,25 +45,31 @@ h2, h3 {
 
 .primary-header {
   background-color: #2C2C2C;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*right: 0;*/
+  /*left: 0;*/
   height: 70px;
 }
 
 .secondary-header {
   /*background-color: #d7d7d7;*/
-  position: absolute;
-  top: 100px;
-  right: 0;
-  left: 0;
-  height: 35px;
+  /*position: absolute;*/
+  /*top: 70px;*/
+  /*right: 0;*/
+  /*left: 0;*/
+  /*height: 35px;*/
   z-index: 1;
   text-transform: uppercase;
   font-size: 1.8em;
   padding: 5px 0 5px 30px;
   color: #868686;
+}
+
+#question-container {
+  color: #000;
+  text-transform: none;
+  font-size: 1em;
 }
 
 .total-attendees,
@@ -91,7 +98,7 @@ h2, h3 {
 
 .content {
   position: absolute;
-  top: 70px;
+  top: 0;
   right: 0;
   left: 0;
   bottom: 0;
@@ -100,7 +107,7 @@ h2, h3 {
 
 
 .speaking-now {
-  margin: 100px 0 0 30px;
+  /*margin: 100px 0 0 30px;*/
 }
 
 .speaking-now div {
@@ -109,6 +116,7 @@ h2, h3 {
 
 .speaking-now-title {
   font-size: 1.8em;
+  padding: 0 0 0 30px;
 }
 
 #currentOrg {
@@ -245,7 +253,8 @@ h2, h3 {
   width: 30%;
   position: relative;
   height: 25px;
-  margin: 100px 0 0 0;
+  display: inline-block;
+  /*margin: 90px 0 0 0;*/
 }
 
 .sentiment-bar1 {
@@ -269,7 +278,7 @@ h2, h3 {
 }
 
 .sentiment-bar2 #sentiment-chart-agree {
-  background-color: #3daa93;
+  background-color: #00aa0f;
   height: 25px;
   float: left;
   position: relative;
@@ -288,7 +297,7 @@ h2, h3 {
 }
 
 .sentiment-bar1 #sentiment-chart-disagree {
-  background-color: #343434;
+  background-color: #ff0011;
   height: 25px;
   float: right;
   position: relative;
@@ -307,7 +316,7 @@ h2, h3 {
 }
 
 .bad-label {
-  color: #343434;
+  color: #ff0011;
   font-family: 'Lato-Bold';
   font-size: 1.5rem;
   width: 100%;
@@ -317,7 +326,7 @@ h2, h3 {
 }
 
 .good-label {
-  color: #3daa93;
+  color: #00aa0f;
   font-family: 'Lato-Bold';
   font-size: 1.5rem;
   width: 100%;
@@ -402,11 +411,11 @@ h2, h3 {
   -o-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  position:absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom:0;
+  /*position:absolute;*/
+  /*left: 0;*/
+  /*top: 0;*/
+  /*right: 0;*/
+  /*bottom:0;*/
 }
 
 #modal {
@@ -442,9 +451,7 @@ h2, h3 {
   transform: scale(1.05);
 }
 
-#question-container {
-  color: #fff;
-}
+
 
 
 

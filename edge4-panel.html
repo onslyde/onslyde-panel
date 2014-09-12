@@ -14,6 +14,9 @@
 <body>
 
 <section id="panel-container">
+
+  <div class="content">
+
     <header class="primary-header">
         <div class="connect-url" onclick="onslyde.panel.toggleConnectInfo()">
             <i class="pictogram">&#128241;</i>onslyde.com/go/<span id="sessionID"></span>
@@ -29,25 +32,25 @@
     <header class="secondary-header bold" id="panel-title">
         <div>Rendering Performance</div>
         <section id="question-container" style="display: none;">
-            test
+
         </section>
     </header>
 
-    <div class="content">
+
 
             <div class="speaking-now">
-              <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
-                <div class="sentiment-bar1">
+                <div class="speaking-now-title light">Speaking now:
+                  <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
+                    <div class="sentiment-bar1">
 
-                  <div id="sentiment-chart-disagree" class="transition"></div>
+                      <div id="sentiment-chart-disagree" class="transition"></div>
+                    </div>
+                    <div class="sentiment-bar2">
+
+                      <div id="sentiment-chart-agree" class="transition"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="sentiment-bar2">
-
-                  <div id="sentiment-chart-agree" class="transition"></div>
-                </div>
-              </div>
-
-                <div class="speaking-now-title light">Speaking now:</div>
                 <div id="currentSpeaker" class="bold">Discussion</div>
             </div>
 
