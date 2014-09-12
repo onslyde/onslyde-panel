@@ -663,13 +663,13 @@
         }
 
         if(currentVotes.agree !== parseInt(agreeCount.innerHTML,10)){
-          agreeCount.innerHTML = currentVotes.agree;
+//          agreeCount.innerHTML = currentVotes.agree;
           agreeCount.className = 'bump-out';
           setTimeout(function(){agreeCount.className = 'bump-in';},200);
         }
 
         if(currentVotes.disagree !== parseInt(disagreeCount.innerHTML,10)){
-          disagreeCount.innerHTML = currentVotes.disagree;
+//          disagreeCount.innerHTML = currentVotes.disagree;
           disagreeCount.className = 'bump-out';
           setTimeout(function(){disagreeCount.className = 'bump-in';},200);
         }

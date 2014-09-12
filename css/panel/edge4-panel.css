@@ -104,7 +104,7 @@ h2, h3 {
 }
 
 .speaking-now div {
-  margin-bottom: 5px;
+  /*margin-bottom: 5px;*/
 }
 
 .speaking-now-title {
@@ -242,9 +242,9 @@ h2, h3 {
 /*===================== sentiment chart*/
 
 .sentiment-container {
-  width: 100%;
+  width: 30%;
   position: relative;
-  height: 150px;
+  height: 25px;
   margin: 100px 0 0 0;
 }
 
@@ -270,10 +270,10 @@ h2, h3 {
 
 .sentiment-bar2 #sentiment-chart-agree {
   background-color: #3daa93;
-  height: 120px;
+  height: 25px;
   float: left;
   position: relative;
-  margin: 12px 0 0 0;
+  margin: 0 0 0 0;
   overflow: hidden;
 }
 
@@ -289,10 +289,10 @@ h2, h3 {
 
 .sentiment-bar1 #sentiment-chart-disagree {
   background-color: #343434;
-  height: 120px;
+  height: 25px;
   float: right;
   position: relative;
-  margin: 12px 0 0 0;
+  margin: 0 0 0 0;
   overflow: hidden;
 }
 
