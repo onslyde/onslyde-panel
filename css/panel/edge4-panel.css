@@ -11,8 +11,8 @@ body {
 
 @font-face {
   font-family: 'entypo';
-  src: url('http://onslyde.com/css/entypo/entypo.eot');
-  src: url('http://onslyde.com/css/entypo/entypo.eot?#iefix') format('http://onslyde.com/css/embedded-opentype'), url('http://onslyde.com/css/entypo/entypo.woff') format('woff'), url('http://onslyde.com/css/entypo/entypo.ttf') format('truetype'), url('http://onslyde.com/css/entypo/entypo.svg#entypo') format('svg');
+  src: url('https://www.onslyde.com/css/entypo/entypo.eot');
+  src: url('https://www.onslyde.com/css/entypo/entypo.eot?#iefix') format('https://www.onslyde.com/css/embedded-opentype'), url('https://www.onslyde.com/css/entypo/entypo.woff') format('woff'), url('https://www.onslyde.com/css/entypo/entypo.ttf') format('truetype'), url('https://www.onslyde.com/css/entypo/entypo.svg#entypo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -126,6 +126,9 @@ h2, h3 {
 
 #currentSpeaker {
   margin: 0 0 10px 30px;
+  clear:both;
+  float:left;
+  width: 45%;
 }
 
 #currentSpeaker,
@@ -147,8 +150,17 @@ h2, h3 {
   /*display:none;*/
 }
 
+#currentSpeakerStatus {
+  border: 1px solid #000;
+  float:right;
+  width: 50%;
+  height: 100px;
+}
+
 .panel {
   margin: 0 0 0 30px;
+  float:left;
+  width: 100%;
 }
 
 .panel-list > li.moderator {
@@ -247,7 +259,12 @@ h2, h3 {
   position: relative;
   height: 25px;
   display: inline-block;
+  float:left;
   /*margin: 90px 0 0 0;*/
+}
+
+.speaking-label {
+  float:left;
 }
 
 .sentiment-bar1 {
@@ -277,6 +294,7 @@ h2, h3 {
   position: relative;
   margin: 0 0 0 0;
   overflow: hidden;
+
 }
 
 .sentiment-bar2 #sentiment-chart-agree #agreeCount {
@@ -287,6 +305,7 @@ h2, h3 {
   color: #fff;
   font-size: 1.5rem;
   font-family: 'Lato-Bold';
+  color: #00aa0f;
 }
 
 .sentiment-bar1 #sentiment-chart-disagree {
@@ -304,6 +323,7 @@ h2, h3 {
   top: 36%;
   left: 0;
   color: #fff;
+  color: #ff0011;
   font-size: 1.5rem;
   font-family: 'Lato-Bold';
 }

@@ -39,19 +39,22 @@
 
 
             <div class="speaking-now">
-                <div class="speaking-now-title light">Speaking now:
+                <div class="speaking-now-title light"><span class="speaking-label">Speaking now:</span>
                   <div class="sentiment-container" onclick="onslyde.panel.toggleRollingAverage();">
                     <div class="sentiment-bar1">
 
-                      <div id="sentiment-chart-disagree" class="transition"></div>
+                      <div id="sentiment-chart-disagree" class="transition"><span id="disagreeCount">0</span></div>
                     </div>
                     <div class="sentiment-bar2">
 
-                      <div id="sentiment-chart-agree" class="transition"></div>
+                      <div id="sentiment-chart-agree" class="transition"><span id="agreeCount">0</span></div>
                     </div>
                   </div>
                 </div>
                 <div id="currentSpeaker" class="bold">Discussion</div>
+                <div id="currentSpeakerStatus">
+                       Continuous Floor Time: 0 Total Floor Time: 0 Contributions: 0
+                </div>
             </div>
 
 
@@ -131,7 +134,7 @@
 
 
 <script type="text/javascript" src="panelists-edge4.js"></script>
-<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.min.js"></script>
+<script type="text/javascript" src="js/panel/dist/onslyde-panel-1.0.0.js"></script>
 <script type="text/javascript">
     onslyde({
         panel: {sessionID: sessionID, mode:'default'}
