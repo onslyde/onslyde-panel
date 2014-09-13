@@ -9,13 +9,22 @@ body {
   background-color: #ececec;
 }
 
+/*@font-face {*/
+  /*font-family: 'entypo';*/
+  /*src: url('https://www.onslyde.com/css/entypo/entypo.eot');*/
+  /*src: url('https://www.onslyde.com/css/entypo/entypo.eot?#iefix') format('https://www.onslyde.com/css/embedded-opentype'), url('https://www.onslyde.com/css/entypo/entypo.woff') format('woff'), url('https://www.onslyde.com/css/entypo/entypo.ttf') format('truetype'), url('https://www.onslyde.com/css/entypo/entypo.svg#entypo') format('svg');*/
+  /*font-weight: normal;*/
+  /*font-style: normal;*/
+/*}*/
+
 @font-face {
   font-family: 'entypo';
-  src: url('https://www.onslyde.com/css/entypo/entypo.eot');
-  src: url('https://www.onslyde.com/css/entypo/entypo.eot?#iefix') format('https://www.onslyde.com/css/embedded-opentype'), url('https://www.onslyde.com/css/entypo/entypo.woff') format('woff'), url('https://www.onslyde.com/css/entypo/entypo.ttf') format('truetype'), url('https://www.onslyde.com/css/entypo/entypo.svg#entypo') format('svg');
+  src: url('http://www.onslyde.com/css/entypo/entypo.eot');
+  src: url('http://www.onslyde.com/css/entypo/entypo.eot?#iefix') format('http://www.onslyde.com/css/embedded-opentype'), url('http://www.onslyde.com/css/entypo/entypo.woff') format('woff'), url('http://www.onslyde.com/css/entypo/entypo.ttf') format('truetype'), url('http://www.onslyde.com/css/entypo/entypo.svg#entypo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
+
 
 i.pictogram {
   font-family: "entypo";
@@ -134,7 +143,7 @@ h2, h3 {
 #currentSpeaker,
 #currentSpeaker .speaker-details .name {
   font-size: 2.6rem;
-  color: #f8f900;
+  color: #755A3D;
   text-transform: uppercase;
   font-family: 'Lato-Bold', sans-serif;
 }
@@ -151,10 +160,18 @@ h2, h3 {
 }
 
 #currentSpeakerStatus {
-  border: 1px solid #000;
+  /* border: 1px solid #000; */
   float:right;
   width: 50%;
   height: 100px;
+}
+
+.speakerStatusList {
+  float: right;
+  margin: 0 10% 0 0;
+  font-size: 1.5em;
+  list-style: none;
+  color: #858585;
 }
 
 .panel {
@@ -165,7 +182,7 @@ h2, h3 {
 
 .panel-list > li.moderator {
   /*border-bottom: 3px solid #2E6651;*/
-  width: 100%;
+  /* width: 100%; */
 }
 
 .panel-list,
@@ -185,9 +202,10 @@ h2, h3 {
 }
 
 .panel-list > li {
-  width: 46%;
+  width: 19%;
   float: left;
-  margin: 5px;
+  margin: 3px;
+  height:  100px;
 }
 
 .panel-list > li.filler {
@@ -205,33 +223,42 @@ h2, h3 {
 }
 
 .queue-title {
-  margin: 29px 0 0 30px;
+  margin: 7px 0 0 30px;
   font-size: 1.3rem;
+  width: 100%;
   color: #777;
+  float: left;
 }
 
 .speaker-queue-container {
   position: relative;
+  /* margin: 0; */
+  /* width: 100%; */
+  /* float: left; */
 }
 
 .speaker-list {
   width: 115%;
   float: left;
-  margin: 10px 10px 10px 30px;
+  margin: 0px 10px 10px 30px;
   color: #343434;
 }
 
 .speaker-list #speaker-template {
   margin: 10px 0 0 0;
+  width: 215px;
+  height: 89px;
+  float: left;
+  font-size: .8em;
 }
 
 #speaker-template {
   /*clear the float*/
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #speaker-template > img {
-  width: 85px;
+  width: 74px;
   float: left;
   margin: 10px 10px 0 0;
   border: 1px solid #fff;
