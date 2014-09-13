@@ -285,7 +285,11 @@
       currentVotes = {agree:0, disagree:0},
       queueTitle,
       connectInfoMode = false,
-      currentQuestionIndex = 0;
+      currentQuestionIndex = 0,
+      continuousFloorTime = document.querySelector('#continuousfloortime > span'),
+      totalfloortime = document.querySelector('#totalfloortime > span'),
+      contributions = document.querySelector('#contributions > span'),
+      floorTime = null;
 
     onslyde.panel = onslyde.prototype = {
 
@@ -357,28 +361,17 @@
 
         //start timer
         var timerHolder = document.getElementById('timer');
+
         var startsecond = 0;
         var eventDate = new Date();
 
+        //main timer
         setInterval(function(){
           var now = new Date();
-
           if (rollingAverageEnabled) {
             manageRollingAverageVote(now);
           }
-
-          var diff = (now - eventDate);
-
-          var currentHours = Math.floor(diff / 3600000);
-          var currentMinutes = Math.floor((diff % 3600000) / 60000);
-          var currentSeconds = Math.floor(((diff % 3600000) % 60000) / 1000);
-          currentHours = (currentHours < 10 ? "0" : "") + currentHours;
-          currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-          currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
-
-          timerHolder.innerHTML = currentHours + ':' + currentMinutes + ":" + currentSeconds;
-
-
+          timerHolder.innerHTML = onslyde.panel.countUpTimer(eventDate,now);
         },1000);
 
 
@@ -398,6 +391,29 @@
 
         this.drawSentimentChart();
 
+      },
+
+      countUpTimer:function(startTime,now){
+        var diff = (now - startTime);
+        var currentHours = Math.floor(diff / 3600000);
+        var currentMinutes = Math.floor((diff % 3600000) / 60000);
+        var currentSeconds = Math.floor(((diff % 3600000) % 60000) / 1000);
+        currentHours = (currentHours < 10 ? "0" : "") + currentHours;
+        currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+        currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+        return currentHours + ':' + currentMinutes + ":" + currentSeconds;
+      },
+
+      setFloorTime:function(){
+        console.log('set floor time');
+        if(floorTime){
+          clearInterval(floorTime);
+        }
+        var startTime = new Date();
+        floorTime = setInterval(function(){
+          var now = new Date();
+          continuousFloorTime.innerHTML = onslyde.panel.countUpTimer(startTime,now);
+        },1000);
       },
 
       calculateConnectString:function (sessionID) {
@@ -644,6 +660,11 @@
         currentVotes.disagree = 0;
         onslyde.panel.drawSentimentChart();
         propsList = [];
+        onslyde.panel.setFloorTime();
+      },
+
+      resetContinuousFloorTime: function() {
+
       },
 
       drawSentimentChart:function () {
