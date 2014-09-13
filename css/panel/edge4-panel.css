@@ -125,7 +125,7 @@ h2, h3 {
 }
 
 #currentSpeaker {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px 30px;
 }
 
 #currentSpeaker,
@@ -193,7 +193,7 @@ h2, h3 {
 }
 
 .queue-title {
-  margin: 29px 0 0 0;
+  margin: 29px 0 0 30px;
   font-size: 1.3rem;
   color: #777;
 }
@@ -203,17 +203,10 @@ h2, h3 {
 }
 
 .speaker-list {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   width: 115%;
   float: left;
-  margin: 10px;
+  margin: 10px 10px 10px 30px;
   color: #343434;
-  height: 300px;
-  overflow-y: scroll;
 }
 
 .speaker-list #speaker-template {
