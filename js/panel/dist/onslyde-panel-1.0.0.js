@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2014-09-13
+/*! onslyde - v0.0.1 - 2014-09-14
 * Copyright (c) 2014 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";
@@ -270,7 +270,16 @@
       continuousFloorTime = document.querySelector('#continuousfloortime > span'),
       totalfloortime = document.querySelector('#totalfloortime > span'),
       contributions = document.querySelector('#contributions > span'),
-      floorTime = null;
+      floorTime = null,
+      totalFloorTimeLookup = {},
+      totalFloorTimeList = [],
+      timeTrackerInterval,
+      speakerTracker = {},
+      speakerTrackerList = [],
+      TFTStart = '00:00:00',
+      TFTEnd = '00:00:00',
+      totalFloorTime,
+        xcurrentSpeaker = {};
 
     onslyde.panel = onslyde.prototype = {
 
@@ -352,7 +361,7 @@
           if (rollingAverageEnabled) {
             manageRollingAverageVote(now);
           }
-          timerHolder.innerHTML = onslyde.panel.countUpTimer(eventDate,now);
+          timerHolder.innerHTML = onslyde.panel.countUpTimer(now - eventDate);
         },1000);
 
 
@@ -374,8 +383,13 @@
 
       },
 
-      countUpTimer:function(startTime,now){
-        var diff = (now - startTime);
+      //second param is optional
+      countUpTimer:function(diff,countup){
+
+        if(countup){
+          diff += 1000;
+        }
+
         var currentHours = Math.floor(diff / 3600000);
         var currentMinutes = Math.floor((diff % 3600000) / 60000);
         var currentSeconds = Math.floor(((diff % 3600000) % 60000) / 1000);
@@ -386,15 +400,35 @@
       },
 
       setFloorTime:function(){
-        console.log('set floor time');
         if(floorTime){
           clearInterval(floorTime);
         }
         var startTime = new Date();
         floorTime = setInterval(function(){
           var now = new Date();
-          continuousFloorTime.innerHTML = onslyde.panel.countUpTimer(startTime,now);
+          continuousFloorTime.innerHTML = onslyde.panel.countUpTimer(now - startTime);
         },1000);
+      },
+
+      setTotalFloorTime:function(ip){
+
+        var exists;
+
+        if(totalFloorTime){
+          clearInterval(totalFloorTime);
+        }
+
+        if(!xcurrentSpeaker[ip]){
+          var start = Date.parse('Thu, 01 Jan 1970 00:00:00 GMT');
+          xcurrentSpeaker[ip] = start;
+        }
+
+        totalFloorTime = setInterval(function(){
+          var xtime = onslyde.panel.countUpTimer(xcurrentSpeaker[ip],true);
+          totalfloortime.innerHTML =  xtime;
+          xcurrentSpeaker[ip] = Date.parse('Thu, 01 Jan 1970 ' + xtime + ' GMT');
+        },1000);
+
       },
 
       calculateConnectString:function (sessionID) {
@@ -563,6 +597,9 @@
 
         var currentSpeakerNode = document.getElementById('currentSpeaker');
         currentSpeakerNode.innerHTML = '';
+
+        onslyde.panel.setTotalFloorTime(ip);
+
         currentSpeakerNode.appendChild(onslyde.panel.createSpeakerNode(speaker, ip, onslyde.panel.removeSpeakerFromLive));
         //should we automatically move the next in the list to "up next" ?
         //for now just remove.
@@ -632,7 +669,6 @@
         document.getElementById('currentSpeaker').innerHTML = 'Discussion';
         onslyde.panel.sendMarkup('<b>Panel Discussion</b>');
         activeOptionsString = 'activeOptions:null,null,Discussion';
-
         onslyde.panel.connect(activeOptionsString);
       },
 
