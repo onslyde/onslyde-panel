@@ -420,13 +420,16 @@
 
         if(!xcurrentSpeaker[ip]){
           var start = Date.parse('Thu, 01 Jan 1970 00:00:00 GMT');
-          xcurrentSpeaker[ip] = start;
+          xcurrentSpeaker[ip] = {start:start, contributions:0};
         }
 
+        contributions.innerHTML = xcurrentSpeaker[ip].contributions++;
+
+
         totalFloorTime = setInterval(function(){
-          var xtime = onslyde.panel.countUpTimer(xcurrentSpeaker[ip],true);
-          totalfloortime.innerHTML =  xtime;
-          xcurrentSpeaker[ip] = Date.parse('Thu, 01 Jan 1970 ' + xtime + ' GMT');
+          var xtime = onslyde.panel.countUpTimer(xcurrentSpeaker[ip].start,true);
+          totalfloortime.innerHTML = xtime;
+          xcurrentSpeaker[ip].start = Date.parse('Thu, 01 Jan 1970 ' + xtime + ' GMT');
         },1000);
 
       },
