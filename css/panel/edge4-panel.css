@@ -77,8 +77,27 @@ h2, h3 {
 
 #question-container {
   color: #000;
+  max-height: 119px;
   text-transform: none;
   font-size: 1em;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transition-duration: .5s;
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transform: translate3d(0, 0, 0);
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+#question-container li {
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transition-duration: .5s;
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transform: translate3d(0, 0, 0);
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  max-height: 0;
+  opacity: 0;
+  list-style: none;
 }
 
 .total-attendees,

@@ -286,6 +286,7 @@
       queueTitle,
       connectInfoMode = false,
       currentQuestionIndex = 0,
+      previousQuestionIndex = -1,
       continuousFloorTime = document.querySelector('#continuousfloortime > span'),
       totalfloortime = document.querySelector('#totalfloortime > span'),
       contributions = document.querySelector('#contributions > span'),
@@ -338,6 +339,8 @@
         }, false);
 
         window.addEventListener('questionIndex', function (e) {
+          previousQuestionIndex = currentQuestionIndex;
+          console.log('cqi',currentQuestionIndex);
           currentQuestionIndex = (e.index || '0');
           currentQuestionIndex = parseInt(currentQuestionIndex,10);
           onslyde.panel.questionIndex(currentQuestionIndex);
@@ -429,12 +432,12 @@
           var now = new Date();
           continuousFloorTime.innerHTML = onslyde.panel.countUpTimer(now - startTime);
           counter++;
-          if(counter > 5) {
+          if(counter > 60) {
             continuousFloorTime.style.color = '#FF99A0';
           }else{
             continuousFloorTime.style.color = '';
           }
-          if(counter > 10){
+          if(counter > 120){
             giveway.style.display = 'inline-block';
           }else{
             giveway.style.display = 'none';
@@ -493,20 +496,28 @@
 
       questionToggle : function(){
         var questions = document.getElementById('question-container');
-        if(questions.style.display === 'none'){
-          questions.style.display = 'block';
+        console.log(currentQuestionIndex, previousQuestionIndex);
+        if(currentQuestionIndex === previousQuestionIndex){
+          if(questions.style.maxHeight === '0px'){
+            questions.style.maxHeight = '200px';
+            questions.style.opacity = 1;
+          }else{
+            questions.style.maxHeight = '0px';
+            questions.style.opacity = 0;
+          }
         }else{
-          questions.style.display = 'none';
+          questions.style.maxHeight = '200px';
+          questions.style.opacity = 1;
         }
+
       },
 
       questionIndex : function(){
         var questions = document.querySelectorAll('#question-container li');
         for(var i = 0; i < questions.length; i++){
-          if(i !== currentQuestionIndex){
-            questions[i].style.display = 'none';
-          }else{
-            questions[i].style.display = 'block';
+          if(currentQuestionIndex !== previousQuestionIndex){
+            questions[i].style.maxHeight = (i === currentQuestionIndex ? '200px':'0px');
+            questions[i].style.opacity = (i === currentQuestionIndex ? 1:0);
           }
         }
       },
