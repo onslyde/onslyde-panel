@@ -174,8 +174,9 @@ h2, h3 {
 
 .speakerStatusList {
   float: right;
-  margin: 0 10% 0 0;
-  font-size: 1.5em;
+  margin: 0 11% 0 0;
+  font-size: 1.3em;
+  width: 75%;
   list-style: none;
   color: #858585;
 }
@@ -498,6 +499,16 @@ h2, h3 {
   -webkit-transform: scale(1.05);
   -moz-transform: scale(1.05);
   transform: scale(1.05);
+}
+
+#giveway {
+  /* display:inline-block; */
+  font-size: .7em;
+  color: #fff;
+  background-color: #F00;
+  margin: 0 0 3px 10px;
+  padding: 3px;
+  display: none;
 }
 
 

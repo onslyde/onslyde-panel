@@ -289,6 +289,7 @@
       continuousFloorTime = document.querySelector('#continuousfloortime > span'),
       totalfloortime = document.querySelector('#totalfloortime > span'),
       contributions = document.querySelector('#contributions > span'),
+      giveway = document.getElementById('giveway'),
       floorTime = null,
       totalFloorTimeLookup = {},
       totalFloorTimeList = [],
@@ -423,9 +424,22 @@
           clearInterval(floorTime);
         }
         var startTime = new Date();
+        var counter = 0;
         floorTime = setInterval(function(){
           var now = new Date();
           continuousFloorTime.innerHTML = onslyde.panel.countUpTimer(now - startTime);
+          counter++;
+          if(counter > 5) {
+            continuousFloorTime.style.color = '#FF99A0';
+          }else{
+            continuousFloorTime.style.color = '';
+          }
+          if(counter > 10){
+            giveway.style.display = 'inline-block';
+          }else{
+            giveway.style.display = 'none';
+          }
+
         },1000);
       },
 
