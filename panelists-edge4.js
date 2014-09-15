@@ -48,32 +48,28 @@ function getPanelists(sessionID) {
       panelTitle = document.querySelector('#panel-title > div');
   switch (parseInt(sessionID, 10)) {
     case 619:
-      selectedPanel = allpanels.components;
+      selectedPanel = allpanels.installable_apps_and_permissions;
       panelTitle.innerHTML = "Installable Apps and Permissions";
       break;
     case 579:
-      selectedPanel = allpanels.developer_tooling;
+      selectedPanel = allpanels.layout_performance;
       panelTitle.innerHTML = "Developer Tooling";
       break;
     case 580:
-      selectedPanel = allpanels.build_process;
+      selectedPanel = allpanels.security_and_identity;
       panelTitle.innerHTML = "Build Process";
       break;
     case 581:
-      selectedPanel = allpanels.page_load_performance;
+      selectedPanel = allpanels.package_management;
       panelTitle.innerHTML = "Page Load Performance";
       break;
     case 582:
-      selectedPanel = allpanels.pointers_and_interactions;
+      selectedPanel = allpanels.image_formats;
       panelTitle.innerHTML = "Pointers and Interactions";
       break;
     case 583:
-      selectedPanel = allpanels.accessibility;
+      selectedPanel = allpanels.standards_and_the_extensible_web_manifesto;
       panelTitle.innerHTML = "Accessibility";
-      break;
-    case 584:
-      selectedPanel = allpanels.future_web;
-      panelTitle.innerHTML = "Future Web";
       break;
   }
   return selectedPanel;
