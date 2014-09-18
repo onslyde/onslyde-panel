@@ -5,8 +5,9 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
-  background-image: url('https://www.onslyde.com/panel/images/SF_at_night_bw.jpg');
+  background-image: url('https://www.onslyde.com/panel/images/SF_at_night_bw_trans.png');
   background-repeat: no-repeat;
+  background-position: 0 -175px;
 }
 
 html {
