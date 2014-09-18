@@ -44,31 +44,50 @@ function getPanelists(sessionID) {
   ], "questions": []}
   };
 
-  var selectedPanel,
+  function sortByMod(list){
+    var byMod = list.slice(0);
+    byMod.sort(function(a,b) {
+      return b.mod - a.mod;
+    });
+    return byMod;
+  }
+
+  var selectedPanel = {},
       panelTitle = document.querySelector('#panel-title > div');
   switch (parseInt(sessionID, 10)) {
     case 619:
       selectedPanel = allpanels.installable_apps_and_permissions;
+      selectedPanel.panelists = sortByMod(allpanels.installable_apps_and_permissions.panelists);
+      panelTitle.innerHTML = "Test Panel";
+      break;
+    case 637:
+      selectedPanel = allpanels.installable_apps_and_permissions;
+      selectedPanel.panelists = sortByMod(allpanels.installable_apps_and_permissions.panelists);
       panelTitle.innerHTML = "Installable Apps and Permissions";
       break;
-    case 579:
+    case 638:
       selectedPanel = allpanels.layout_performance;
+      selectedPanel.panelists = sortByMod(allpanels.layout_performance.panelists);
       panelTitle.innerHTML = "Developer Tooling";
       break;
-    case 580:
+    case 639:
       selectedPanel = allpanels.security_and_identity;
+      selectedPanel.panelists = sortByMod(allpanels.security_and_identity.panelists);
       panelTitle.innerHTML = "Build Process";
       break;
-    case 581:
+    case 640:
       selectedPanel = allpanels.package_management;
+      selectedPanel.panelists = sortByMod(allpanels.package_management.panelists);
       panelTitle.innerHTML = "Page Load Performance";
       break;
-    case 582:
+    case 641:
       selectedPanel = allpanels.image_formats;
+      selectedPanel.panelists = sortByMod(allpanels.image_formats.panelists);
       panelTitle.innerHTML = "Pointers and Interactions";
       break;
-    case 583:
+    case 642:
       selectedPanel = allpanels.standards_and_the_extensible_web_manifesto;
+      selectedPanel.panelists = sortByMod(allpanels.standards_and_the_extensible_web_manifesto.panelists);
       panelTitle.innerHTML = "Accessibility";
       break;
   }

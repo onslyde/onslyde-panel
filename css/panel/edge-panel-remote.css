@@ -4,6 +4,9 @@ body {
   color: #fff;
   margin: 0;
   padding: 0;
+  background-color: #000;
+  background-image: url('https://www.onslyde.com/panel/images/SF_at_night_bw.jpg');
+  background-repeat: no-repeat;
 }
 
 html {
@@ -261,7 +264,7 @@ nav.primary > ul li a {
 }
 
 nav.primary li.logo-banner {
-  background-image: url('https://www.onslyde.com/panel/images/edgebg.jpg');
+  /*background-image: url('https://www.onslyde.com/panel/images/edge4bg.jpg');*/
   text-align: center;
   padding: 6px 0 6px 0;
 }
