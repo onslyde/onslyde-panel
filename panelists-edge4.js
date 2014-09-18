@@ -68,27 +68,27 @@ function getPanelists(sessionID) {
     case 638:
       selectedPanel = allpanels.layout_performance;
       selectedPanel.panelists = sortByMod(allpanels.layout_performance.panelists);
-      panelTitle.innerHTML = "Developer Tooling";
+      panelTitle.innerHTML = "Layout Performance";
       break;
     case 639:
       selectedPanel = allpanels.security_and_identity;
       selectedPanel.panelists = sortByMod(allpanels.security_and_identity.panelists);
-      panelTitle.innerHTML = "Build Process";
+      panelTitle.innerHTML = "Security and Identity";
       break;
     case 640:
       selectedPanel = allpanels.package_management;
       selectedPanel.panelists = sortByMod(allpanels.package_management.panelists);
-      panelTitle.innerHTML = "Page Load Performance";
+      panelTitle.innerHTML = "Package Management";
       break;
     case 641:
       selectedPanel = allpanels.image_formats;
       selectedPanel.panelists = sortByMod(allpanels.image_formats.panelists);
-      panelTitle.innerHTML = "Pointers and Interactions";
+      panelTitle.innerHTML = "Image Formats";
       break;
     case 642:
       selectedPanel = allpanels.standards_and_the_extensible_web_manifesto;
       selectedPanel.panelists = sortByMod(allpanels.standards_and_the_extensible_web_manifesto.panelists);
-      panelTitle.innerHTML = "Accessibility";
+      panelTitle.innerHTML = "Standards and the Extensible Web Manifesto";
       break;
   }
   return selectedPanel;
