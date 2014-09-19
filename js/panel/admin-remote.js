@@ -8,7 +8,7 @@ function sendText(text){
 }
 
 function toggleQuestion(index){
-  sendText('questionToggle:');
+
   sendText('questionIndex:' + index);
 }
 

@@ -285,7 +285,7 @@
       currentVotes = {agree:0, disagree:0},
       queueTitle,
       connectInfoMode = false,
-      currentQuestionIndex = 0,
+      currentQuestionIndex = -1,
       previousQuestionIndex = -1,
       continuousFloorTime = document.querySelector('#continuousfloortime > span'),
       totalfloortime = document.querySelector('#totalfloortime > span'),
@@ -341,7 +341,7 @@
         window.addEventListener('questionIndex', function (e) {
           previousQuestionIndex = currentQuestionIndex;
           console.log('cqi',currentQuestionIndex);
-          currentQuestionIndex = (e.index || '0');
+          currentQuestionIndex = (e.index || '-1');
           currentQuestionIndex = parseInt(currentQuestionIndex,10);
           onslyde.panel.questionIndex(currentQuestionIndex);
         }, false);
@@ -495,31 +495,49 @@
       },
 
       questionToggle : function(){
-        var questions = document.getElementById('question-container');
-        console.log(currentQuestionIndex, previousQuestionIndex);
-        if(currentQuestionIndex === previousQuestionIndex){
-          if(questions.style.maxHeight === '0px'){
-            questions.style.maxHeight = '200px';
-            questions.style.opacity = 1;
-          }else{
-            questions.style.maxHeight = '0px';
-            questions.style.opacity = 0;
-          }
-        }else{
-          questions.style.maxHeight = '200px';
-          questions.style.opacity = 1;
-        }
+
+//        console.log(currentQuestionIndex, previousQuestionIndex);
+//        if(currentQuestionIndex === previousQuestionIndex){
+//          if(questions.style.maxHeight === '0px'){
+//            questions.style.maxHeight = '200px';
+//            questions.style.opacity = 1;
+//          }else{
+//            questions.style.maxHeight = '0px';
+//            questions.style.opacity = 0;
+//          }
+//        }else{
+//          questions.style.maxHeight = '200px';
+//          questions.style.opacity = 1;
+//        }
 
       },
 
       questionIndex : function(){
-        var questions = document.querySelectorAll('#question-container li');
+        var questions = document.querySelectorAll('#question-container li'),
+            isnew = false;
         for(var i = 0; i < questions.length; i++){
+          console.log(currentQuestionIndex, previousQuestionIndex);
           if(currentQuestionIndex !== previousQuestionIndex){
             questions[i].style.maxHeight = (i === currentQuestionIndex ? '200px':'0px');
             questions[i].style.opacity = (i === currentQuestionIndex ? 1:0);
+//            isnew = true;
+//            break;
+          }else{
+            console.log(questions[i].style.maxHeight);
+            if(questions[i].style.maxHeight !== '0px' && i === currentQuestionIndex){
+              questions[i].style.maxHeight = ('0px');
+              questions[i].style.opacity = (0);
+            }else if(i === currentQuestionIndex){
+              questions[i].style.maxHeight = ('200px');
+              questions[i].style.opacity = (1);
+            }
+
           }
         }
+//        if(!isnew){
+//          questioncontainer.style.maxHeight = '0px';
+//          questioncontainer.style.opacity = 0;
+//        }
       },
 
       toggleConnectInfo : function(){

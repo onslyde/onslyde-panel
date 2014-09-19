@@ -35,8 +35,8 @@
     var questions = activeQuestions;
     for ( var i = 0; i < questions.length; i++ ) {
     %>
-    <li style="padding: 15px;width: 90%;background-color:#ececec;margin: 4px auto;">
-       <a href="#" onclick="toggleQuestion('<%=i%>');" style="color:#1a1a1a;"><%=questions[i]%></a>
+    <li style="padding: 15px;width: 90%;background-color:#ececec;margin: 4px auto;" onclick="toggleQuestion('<%=i%>');">
+       <a href="#" style="color:#1a1a1a;"><%=questions[i]%></a>
     </li>
     <% } %>
 </script>

@@ -14,34 +14,34 @@ function getPanelists(sessionID) {
     {"Surname": "Baron", "FirstName": "David", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/david-baron.jpg", "twitter": "davidbaron", "org": "Mozilla"},
     {"Surname": "Ying", "FirstName": "Charles", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/charles-ying.jpg", "twitter": "charlietuna", "org": "Flipboard"},
     {"Surname": "Shaver", "FirstName": "Mike", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/mike-shaver.jpg", "twitter": "shaver", "org": "Facebook"}
-  ], "questions": []}, "security_and_identity": {"panelists": [
+  ], "questions": ["A Question for layout perf","A Question for layout perf2"]}, "security_and_identity": {"panelists": [
     {"Surname": "Rooney", "FirstName": "Natasha", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/natasha-rooney.jpg", "twitter": "thisnatasha", "org": "GSMA"},
     {"Surname": "Nottingham", "FirstName": "Mark", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/mark-nottingham.jpg", "twitter": "mnot", "org": "Akamai"},
     {"Surname": "Zhu", "FirstName": "Yan", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/yan-zhu.jpg", "twitter": "bcrypt", "org": "Yahoo!"},
     {"Surname": "Messina", "FirstName": "Chris", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/chris-messina.jpg", "twitter": "chrismessina", "org": "Agent of free will"},
     {"Surname": "West", "FirstName": "Mike", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/mike-west.jpg", "twitter": "mikewest", "org": "Google"},
     {"Surname": "Coates", "FirstName": "Michael", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/michael-coates.jpg", "twitter": "_mwc", "org": "Shape Security"}
-  ], "questions": []}, "package_management": {"panelists": [
+  ], "questions": ["A Question for security_and_identity 1","A Question for security_and_identity 2"]}, "package_management": {"panelists": [
     {"Surname": "Simpson", "FirstName": "Kyle", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/kyle-simpson.jpg", "twitter": "@getify", "org": "Getify Solutions, Inc."},
     {"Surname": "Peek", "FirstName": "Joshua", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/joshua-peek.jpg", "twitter": "joshpeek", "org": "GitHub"},
     {"Surname": "Voss", "FirstName": "Laurie", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/laurie-voss.jpg", "twitter": "seldo", "org": "NPM, Inc"},
     {"Surname": "Beck", "FirstName": "David", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/david-beck.jpg", "twitter": "davegbeck", "org": "Rotunda Software"},
     {"Surname": "Denicola", "FirstName": "Domenic", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/domenic-denicola.jpg", "twitter": "domenic", "org": "Google"},
     {"Surname": "Mueller", "FirstName": "Matthew", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/matthew-mueller.jpg", "twitter": "mattmueller", "org": "Lapwing Labs"}
-  ], "questions": []}, "image_formats": {"panelists": [
+  ], "questions": ["A Question for package_management 1","A Question for package_management 2"]}, "image_formats": {"panelists": [
     {"Surname": "Robson", "FirstName": "Ann", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/ann-robson.jpg", "twitter": "arobson", "org": "Yammer"},
     {"Surname": "Podjarny", "FirstName": "Guy", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/guy-podjarny.jpg", "twitter": "guypod", "org": "Akamai"},
     {"Surname": "Weiss", "FirstName": "Yoav", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/yoav-weiss.jpg", "twitter": "yoavweiss", "org": "WL Square"},
     {"Surname": "Lesinski", "FirstName": "Kornel", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/kornel-lesinski.jpg", "twitter": "pornel", "org": "Financial Times"},
     {"Surname": "Grigorik", "FirstName": "Ilya", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/ilya-grigorik.jpg", "twitter": "igrigorik", "org": "Google"}
-  ], "questions": []}, "standards_and_the_extensible_web_manifesto": {"panelists": [
+  ], "questions": ["A Question for image_formats 1","A Question for image_formats 2"]}, "standards_and_the_extensible_web_manifesto": {"panelists": [
     {"Surname": "Russell", "FirstName": "Alex", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/alex-russell.jpg", "twitter": "slightlylate", "org": "Google"},
     {"Surname": "Manian", "FirstName": "Divya", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/divya-manian.jpg", "twitter": "divya", "org": "Adobe"},
     {"Surname": "Danger Gardner", "FirstName": "Lyza", "mod": true, "pic": "http:\/\/edgeconf.com\/images\/heads\/lyza-danger-gardner.jpg", "twitter": "lyzadanger", "org": "Cloud Four"},
     {"Surname": "Bateman", "FirstName": "Adrian", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/adrian-bateman.jpg", "twitter": "adrianba", "org": "Microsoft"},
     {"Surname": "Kardell", "FirstName": "Brian", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/brian-kardell.jpg", "twitter": "briankardell", "org": "Apollo Group"},
     {"Surname": "Christiansen", "FirstName": "Kenneth", "mod": false, "pic": "http:\/\/edgeconf.com\/images\/heads\/kenneth-christiansen.jpg", "twitter": "kennethrohde", "org": "Intel"}
-  ], "questions": []}
+  ], "questions": ["A Question for standards_and_the_extensible_web_manifesto 1","A Question for standards_and_the_extensible_web_manifesto 2"]}
   };
 
   function sortByMod(list){
