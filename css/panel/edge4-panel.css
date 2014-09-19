@@ -311,10 +311,14 @@ h2, h3 {
 
 .speaker-details .name {
   font-size: 1.8em;
+  margin: 8px 0 0 0;
+  font-weight: bold;
+  color: #494949;
 }
 
 .speaker-details .org {
   font-size: 1.2em;
+  font-size: 1.7em;
 }
 
 /*===================== sentiment chart*/
