@@ -592,6 +592,7 @@
           for (var i = 0, len = attendeesLookup.length; i < len; i++) {
             var attendee = attendeesLookup[i];
             var fullName = attendee.FirstName + ' ' + attendee.Surname;
+
             if(speaker.name === fullName){
               speaker.org = attendee.Company;
               break;
@@ -607,7 +608,10 @@
           console.log('fix this');
         }
 
-        fragment.querySelector('.org').innerHTML = speaker.org;
+        if(speaker.org !== undefined){
+          fragment.querySelector('.org').innerHTML = speaker.org;
+        }
+
         return fragment;
       },
 

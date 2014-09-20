@@ -1,4 +1,4 @@
-/*! onslyde - v0.0.1 - 2014-09-19
+/*! onslyde - v0.0.1 - 2014-09-20
 * Copyright (c) 2014 Wesley Hales; Licensed  */
 (function (window, document, undefined) {
   "use strict";
@@ -573,6 +573,7 @@
           for (var i = 0, len = attendeesLookup.length; i < len; i++) {
             var attendee = attendeesLookup[i];
             var fullName = attendee.FirstName + ' ' + attendee.Surname;
+
             if(speaker.name === fullName){
               speaker.org = attendee.Company;
               break;
@@ -588,7 +589,10 @@
           console.log('fix this');
         }
 
-        fragment.querySelector('.org').innerHTML = speaker.org;
+        if(speaker.org !== undefined){
+          fragment.querySelector('.org').innerHTML = speaker.org;
+        }
+
         return fragment;
       },
 

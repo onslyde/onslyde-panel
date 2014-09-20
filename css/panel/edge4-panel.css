@@ -280,6 +280,8 @@ h2, h3 {
   float: left;
   margin: 0px 10px 10px 30px;
   color: #343434;
+  max-height:97px
+  overflow:hidden;
 }
 
 .speaker-list #speaker-template {
