@@ -588,30 +588,33 @@
         //todo - move this out to plugin
         try{
         var attendeesLookup = getAttendees();
-        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' ){
+
+          console.log('-----4',speaker.name,speaker.email,speaker.org);
+
+        if(Object.prototype.toString.call(attendeesLookup) === '[object Array]' && !speaker.org){
           for (var i = 0, len = attendeesLookup.length; i < len; i++) {
             var attendee = attendeesLookup[i];
             var fullName = attendee.FirstName + ' ' + attendee.Surname;
 
             if(speaker.name === fullName){
-              speaker.org = attendee.Company;
+              speaker.org = attendee.org;
+              console.log('-----2',speaker.name,speaker.email,attendee.org);
               break;
             }else if(speaker.email === attendee.Email){
               speaker.org = attendee.Company;
+              console.log('-----13',speaker.name,speaker.email,speaker.org);
               break;
             }else{
               speaker.org = '';
+
             }
           }
         }
         }catch(e){
           console.log('fix this');
         }
-
-        if(speaker.org !== undefined){
-          fragment.querySelector('.org').innerHTML = speaker.org;
-        }
-
+        console.log('-----1',speaker.name,speaker.email,speaker.org);
+        fragment.querySelector('.org').innerHTML = speaker.org;
         return fragment;
       },
 
